@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="SlaveInterfaceTestbench_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="SlaveInterfaceTestbench" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="1.833 ns"></ZoomStartTime>
+      <ZoomEndTime time="27.034 ns"></ZoomEndTime>
+      <Cursor1Time time="7.433 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="153"></NameColumnWidth>
+      <ValueColumnWidth column_width="87"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="17" />
+   <wvobject type="logic" fp_name="/SlaveInterfaceTestbench/r_Clk">
+      <obj_property name="ElementShortName">r_Clk</obj_property>
+      <obj_property name="ObjectShortName">r_Clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/SlaveInterfaceTestbench/r_Rst">
+      <obj_property name="ElementShortName">r_Rst</obj_property>
+      <obj_property name="ObjectShortName">r_Rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/SlaveInterfaceTestbench/r_WEnable">
+      <obj_property name="ElementShortName">r_WEnable</obj_property>
+      <obj_property name="ObjectShortName">r_WEnable</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/SlaveInterfaceTestbench/r_REnable">
+      <obj_property name="ElementShortName">r_REnable</obj_property>
+      <obj_property name="ObjectShortName">r_REnable</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/SlaveInterfaceTestbench/r_WAddr">
+      <obj_property name="ElementShortName">r_WAddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">r_WAddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/SlaveInterfaceTestbench/r_RAddr">
+      <obj_property name="ElementShortName">r_RAddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">r_RAddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/SlaveInterfaceTestbench/r_WData">
+      <obj_property name="ElementShortName">r_WData[31:0]</obj_property>
+      <obj_property name="ObjectShortName">r_WData[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/SlaveInterfaceTestbench/w_Err">
+      <obj_property name="ElementShortName">w_Err</obj_property>
+      <obj_property name="ObjectShortName">w_Err</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/SlaveInterfaceTestbench/w_RData">
+      <obj_property name="ElementShortName">w_RData[31:0]</obj_property>
+      <obj_property name="ObjectShortName">w_RData[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/SlaveInterfaceTestbench/_Dut/_Bram/clka">
+      <obj_property name="ElementShortName">clka</obj_property>
+      <obj_property name="ObjectShortName">clka</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/SlaveInterfaceTestbench/_Dut/_Bram/rsta">
+      <obj_property name="ElementShortName">rsta</obj_property>
+      <obj_property name="ObjectShortName">rsta</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/SlaveInterfaceTestbench/_Dut/_Bram/ena">
+      <obj_property name="ElementShortName">ena</obj_property>
+      <obj_property name="ObjectShortName">ena</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/SlaveInterfaceTestbench/_Dut/_Bram/wea">
+      <obj_property name="ElementShortName">wea[3:0]</obj_property>
+      <obj_property name="ObjectShortName">wea[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/SlaveInterfaceTestbench/_Dut/_Bram/addra">
+      <obj_property name="ElementShortName">addra[31:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/SlaveInterfaceTestbench/_Dut/_Bram/dina">
+      <obj_property name="ElementShortName">dina[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dina[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/SlaveInterfaceTestbench/_Dut/_Bram/douta">
+      <obj_property name="ElementShortName">douta[31:0]</obj_property>
+      <obj_property name="ObjectShortName">douta[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/SlaveInterfaceTestbench/_Dut/_Bram/rsta_busy">
+      <obj_property name="ElementShortName">rsta_busy</obj_property>
+      <obj_property name="ObjectShortName">rsta_busy</obj_property>
+   </wvobject>
+</wave_config>
