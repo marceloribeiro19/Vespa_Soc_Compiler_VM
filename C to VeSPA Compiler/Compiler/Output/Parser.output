@@ -1,0 +1,5118 @@
+Terminals unused in grammar
+
+    TOKEN_ERROR
+    TOKEN_STRUCT
+    TOKEN_TYPEDEF
+    TOKEN_ENUM
+    TOKEN_SIZEOF
+    TOKEN_UNION
+    TOKEN_ARROW
+    TOKEN_ADDRESS_OF
+    TOKEN_DOT
+
+
+State 32 conflicts: 28 shift/reduce
+State 168 conflicts: 24 reduce/reduce
+State 169 conflicts: 24 reduce/reduce
+State 170 conflicts: 14 shift/reduce
+State 245 conflicts: 1 shift/reduce
+State 264 conflicts: 16 shift/reduce
+State 274 conflicts: 27 shift/reduce
+State 279 conflicts: 27 shift/reduce
+State 280 conflicts: 27 shift/reduce
+
+
+Grammar
+
+    0 $accept: R_PROGRAM $end
+
+    1 R_PROGRAM: R_PROGRAM TOKEN_EOF
+    2          | R_PROGRAM R_GLOBAL_STATEMENT
+    3          | R_GLOBAL_STATEMENT
+
+    4 R_GLOBAL_STATEMENT: R_VAR_DECLARATION
+    5                   | R_FUNC_PROTOTYPE
+    6                   | R_FUNC_IMPLEMENT
+
+    7 R_LOCAL_STATEMENT_LIST: ε
+    8                       | R_LOCAL_STATEMENT_LIST R_LOCAL_STATEMENT
+    9                       | R_LOCAL_STATEMENT
+
+   10 R_LOCAL_STATEMENT: R_IF_STATEMENT
+   11                  | R_GOTO
+   12                  | R_SWITCH
+   13                  | R_BREAK
+   14                  | R_CONTINUE
+   15                  | R_DO_WHILE_LOOP
+   16                  | R_LABEL
+   17                  | R_WHILE_LOOP
+   18                  | R_FOR_LOOP
+   19                  | R_COMPOUND_STATEMENT
+   20                  | R_RETURN
+   21                  | R_VAR_DECLARATION
+   22                  | R_VAR_ASSIGNMENT
+   23                  | R_FUNC_CALL TOKEN_SEMI
+   24                  | R_INC_DEC TOKEN_SEMI
+
+   25 R_COMPOUND_STATEMENT: TOKEN_LEFT_BRACE R_LOCAL_STATEMENT_LIST TOKEN_RIGHT_BRACE
+   26                     | TOKEN_LEFT_BRACE TOKEN_RIGHT_BRACE
+
+   27 R_CONTINUE: TOKEN_CONTINUE TOKEN_SEMI
+
+   28 R_BREAK: TOKEN_BREAK TOKEN_SEMI
+
+   29 R_GOTO: TOKEN_GOTO TOKEN_ID TOKEN_SEMI
+
+   30 R_SWITCH: TOKEN_SWITCH TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_LEFT_BRACE R_SWITCH_BODY TOKEN_RIGHT_BRACE
+
+   31 R_SWITCH_BODY: R_CASE_LIST R_DEFAULT
+   32              | R_CASE_LIST
+   33              | R_DEFAULT
+
+   34 R_CASE_LIST: R_CASE_LIST R_CASE
+   35            | R_CASE
+
+   36 R_CASE: TOKEN_CASE TOKEN_NUM TOKEN_COLON R_LOCAL_STATEMENT_LIST
+   37       | TOKEN_CASE TOKEN_CNUM TOKEN_COLON R_LOCAL_STATEMENT_LIST
+
+   38 R_DEFAULT: TOKEN_DEFAULT TOKEN_COLON R_LOCAL_STATEMENT_LIST
+
+   39 R_IF_STATEMENT: TOKEN_IF TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+   40               | TOKEN_IF TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT TOKEN_ELSE R_LOCAL_STATEMENT
+
+   41 R_RETURN: TOKEN_RETURN TOKEN_SEMI
+   42         | TOKEN_RETURN R_EXP TOKEN_SEMI
+
+   43 R_WHILE_LOOP: TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+   44             | TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_SEMI
+
+   45 R_DO_WHILE_LOOP: TOKEN_DO R_LOCAL_STATEMENT TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_SEMI
+
+   46 R_FOR_LOOP: TOKEN_FOR TOKEN_LEFT_PARENTHESES R_FOR_INIT_FIELD TOKEN_SEMI R_EXP TOKEN_SEMI R_FOR_ASSIGNMENT_FIELD TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+
+   47 R_FOR_INIT_FIELD: TOKEN_ID TOKEN_ASSIGN R_EXP
+
+   48 R_FOR_ASSIGNMENT_FIELD: R_SIMPLE_VAR_ASSIGN
+   49                       | R_COMPOUND_VAR_ASSIGN
+   50                       | R_INC_DEC
+
+   51 R_LABEL: TOKEN_ID TOKEN_COLON
+
+   52 R_FUNC_SIGNATURE: R_VAR_PREAMBLE TOKEN_ID TOKEN_LEFT_PARENTHESES R_ARG_LIST TOKEN_RIGHT_PARENTHESES
+
+   53 R_FUNC_PROTOTYPE: R_FUNC_SIGNATURE TOKEN_SEMI
+
+   54 R_FUNC_IMPLEMENT: R_FUNC_SIGNATURE R_COMPOUND_STATEMENT
+
+   55 R_FUNC_CALL: TOKEN_ID TOKEN_LEFT_PARENTHESES R_EXP_LIST TOKEN_RIGHT_PARENTHESES
+
+   56 R_EXP_LIST: ε
+   57           | R_EXP_LIST TOKEN_COMMA R_EXP
+   58           | R_EXP
+
+   59 R_ARG_LIST: ε
+   60           | R_ARG_LIST TOKEN_COMMA R_ARG
+   61           | R_ARG
+
+   62 R_ARG: R_MOD_QUALIFIER R_SIGN_QUALIFIER R_TYPE_ALL TOKEN_ID
+   63      | R_SIGN_QUALIFIER R_TYPE_ALL TOKEN_ID
+   64      | R_MOD_QUALIFIER R_TYPE_ALL TOKEN_ID
+   65      | R_TYPE_ALL TOKEN_ID
+
+   66 R_VAR_DECLARATION: R_VAR_PREAMBLE R_ID_LIST TOKEN_SEMI
+   67                  | R_ARR_DECLARATION
+
+   68 R_ARR_DECLARATION: R_VAR_PREAMBLE TOKEN_ID R_ARR_SIZE TOKEN_SEMI
+
+   69 R_ARR_SIZE: TOKEN_LEFT_BRACKET TOKEN_NUM TOKEN_RIGHT_BRACKET
+
+   70 R_ID_LIST: R_ID_LIST TOKEN_COMMA TOKEN_ID
+   71          | R_ID_LIST TOKEN_COMMA R_SIMPLE_VAR_ASSIGN
+   72          | R_SIMPLE_VAR_ASSIGN
+   73          | TOKEN_ID
+
+   74 R_VAR_ASSIGNMENT: R_SIMPLE_VAR_ASSIGN TOKEN_SEMI
+   75                 | R_COMPOUND_VAR_ASSIGN TOKEN_SEMI
+   76                 | R_ARRAY_INDEX TOKEN_ASSIGN R_EXP TOKEN_SEMI
+   77                 | R_POINTER_CONTENT TOKEN_ASSIGN R_EXP TOKEN_SEMI
+
+   78 R_COMPOUND_VAR_ASSIGN: TOKEN_ID R_COMPOUND_ASSIGN_OPERATOR R_EXP
+
+   79 R_SIMPLE_VAR_ASSIGN: TOKEN_ID TOKEN_ASSIGN R_EXP
+
+   80 R_VAR_PREAMBLE: R_VISIBILITY_QUALIFIER R_MOD_QUALIFIER R_SIGN_QUALIFIER R_TYPE_ALL
+   81               | R_VISIBILITY_QUALIFIER R_MOD_QUALIFIER R_TYPE_ALL
+   82               | R_VISIBILITY_QUALIFIER R_SIGN_QUALIFIER R_TYPE_ALL
+   83               | R_MOD_QUALIFIER R_SIGN_QUALIFIER R_TYPE_ALL
+   84               | R_VISIBILITY_QUALIFIER R_TYPE_ALL
+   85               | R_MOD_QUALIFIER R_TYPE_ALL
+   86               | R_SIGN_QUALIFIER R_TYPE_ALL
+   87               | R_TYPE_ALL
+
+   88 R_EXP: TOKEN_MINUS R_EXP
+   89      | R_EXP R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP R_BITWISE_OPERATOR R_TERM
+   92      | TOKEN_BITWISE_NOT R_TERM
+   93      | R_EXP R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+   95      | R_TERM
+
+   96 R_TERM: R_TERM R_PRIORITY_OPERATOR R_OPERAND
+   97       | R_OPERAND
+
+   98 R_OPERAND: R_INC_DEC
+   99          | TOKEN_LOGICAL_NOT R_FACTOR
+  100          | R_TYPE_CAST R_FACTOR
+  101          | R_FACTOR
+
+  102 R_FACTOR: TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES
+  103         | R_ARRAY_INDEX
+  104         | TOKEN_MINUS TOKEN_NUM
+  105         | TOKEN_NUM
+  106         | TOKEN_ID
+  107         | R_POINTER_CONTENT
+  108         | TOKEN_MINUS TOKEN_FNUM
+  109         | TOKEN_FNUM
+  110         | TOKEN_CNUM
+  111         | TOKEN_STR
+  112         | TOKEN_BITWISE_AND R_ARRAY_INDEX
+  113         | TOKEN_BITWISE_AND TOKEN_ID
+  114         | R_FUNC_CALL
+
+  115 R_ARRAY_INDEX: TOKEN_ID TOKEN_LEFT_BRACKET R_EXP TOKEN_RIGHT_BRACKET
+
+  116 R_POINTER_CONTENT: TOKEN_ASTERISK TOKEN_ID
+
+  117 R_INC_DEC: R_PRE_INCREMENT
+  118          | R_POST_INCREMENT
+  119          | R_PRE_DECREMENT
+  120          | R_POST_DECREMENT
+
+  121 R_PRE_INCREMENT: TOKEN_INCREMENT TOKEN_ID
+
+  122 R_POST_INCREMENT: TOKEN_ID TOKEN_INCREMENT
+
+  123 R_PRE_DECREMENT: TOKEN_DECREMENT TOKEN_ID
+
+  124 R_POST_DECREMENT: TOKEN_ID TOKEN_DECREMENT
+
+  125 R_ARITHMETIC_OPERATOR: TOKEN_PLUS
+  126                      | TOKEN_MINUS
+  127                      | TOKEN_RIGHT_SHIFT
+  128                      | TOKEN_LEFT_SHIFT
+
+  129 R_PRIORITY_OPERATOR: TOKEN_ASTERISK
+  130                    | TOKEN_OVER
+  131                    | TOKEN_PERCENT
+
+  132 R_CONDITION_OPERATOR: TOKEN_GREATER_THAN
+  133                     | TOKEN_LESS_THAN_OR_EQUAL
+  134                     | TOKEN_GREATER_THAN_OR_EQUAL
+  135                     | TOKEN_LESS_THAN
+  136                     | TOKEN_EQUAL
+  137                     | TOKEN_NOT_EQUAL
+
+  138 R_LOGIC_OPERATOR: TOKEN_LOGICAL_AND
+  139                 | TOKEN_LOGICAL_OR
+
+  140 R_BITWISE_OPERATOR: TOKEN_BITWISE_AND
+  141                   | TOKEN_BITWISE_OR
+  142                   | TOKEN_BITWISE_XOR
+
+  143 R_COMPOUND_ASSIGN_OPERATOR: TOKEN_PLUS_ASSIGN
+  144                           | TOKEN_MINUS_ASSIGN
+  145                           | TOKEN_MODULUS_ASSIGN
+  146                           | TOKEN_LEFT_SHIFT_ASSIGN
+  147                           | TOKEN_RIGHT_SHIFT_ASSIGN
+  148                           | TOKEN_BITWISE_AND_ASSIGN
+  149                           | TOKEN_BITWISE_OR_ASSIGN
+  150                           | TOKEN_BITWISE_XOR_ASSIGN
+  151                           | TOKEN_MULTIPLY_ASSIGN
+  152                           | TOKEN_DIVIDE_ASSIGN
+
+  153 R_TYPE_CAST: TOKEN_LEFT_PARENTHESES R_TYPE_ALL TOKEN_RIGHT_PARENTHESES
+
+  154 R_TYPE_ALL: R_TYPE
+  155           | R_TYPE_PTR
+
+  156 R_TYPE_PTR: R_TYPE TOKEN_ASTERISK
+
+  157 R_TYPE: TOKEN_CHAR
+  158       | TOKEN_SHORT
+  159       | TOKEN_INT
+  160       | TOKEN_LONG
+  161       | TOKEN_FLOAT
+  162       | TOKEN_DOUBLE
+  163       | TOKEN_LONG TOKEN_DOUBLE
+  164       | TOKEN_VOID
+
+  165 R_VISIBILITY_QUALIFIER: TOKEN_STATIC
+  166                       | TOKEN_EXTERN
+
+  167 R_MOD_QUALIFIER: TOKEN_CONSTANT
+  168                | TOKEN_VOLATILE
+
+  169 R_SIGN_QUALIFIER: TOKEN_SIGNED
+  170                 | TOKEN_UNSIGNED
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    TOKEN_IF (258) 39 40
+    TOKEN_EOF (259) 1
+    TOKEN_ERROR (260)
+    TOKEN_ELSE (261) 40
+    TOKEN_DO (262) 45
+    TOKEN_WHILE (263) 43 44 45
+    TOKEN_FOR (264) 46
+    TOKEN_SWITCH (265) 30
+    TOKEN_CASE (266) 36 37
+    TOKEN_DEFAULT (267) 38
+    TOKEN_RETURN (268) 41 42
+    TOKEN_BREAK (269) 28
+    TOKEN_INT (270) 159
+    TOKEN_FLOAT (271) 161
+    TOKEN_DOUBLE (272) 162 163
+    TOKEN_CHAR (273) 157
+    TOKEN_VOID (274) 164
+    TOKEN_STRUCT (275)
+    TOKEN_TYPEDEF (276)
+    TOKEN_CONTINUE (277) 27
+    TOKEN_EXTERN (278) 166
+    TOKEN_GOTO (279) 29
+    TOKEN_LONG (280) 160 163
+    TOKEN_ENUM (281)
+    TOKEN_SHORT (282) 158
+    TOKEN_SIZEOF (283)
+    TOKEN_STATIC (284) 165
+    TOKEN_SIGNED (285) 169
+    TOKEN_UNION (286)
+    TOKEN_UNSIGNED (287) 170
+    TOKEN_VOLATILE (288) 168
+    TOKEN_ASSIGN (289) 47 76 77 79
+    TOKEN_PLUS (290) 125
+    TOKEN_MINUS (291) 88 104 108 126
+    TOKEN_OVER (292) 130
+    TOKEN_PERCENT (293) 131
+    TOKEN_LEFT_PARENTHESES (294) 30 39 40 43 44 45 46 52 55 102 153
+    TOKEN_RIGHT_PARENTHESES (295) 30 39 40 43 44 45 46 52 55 102 153
+    TOKEN_LEFT_BRACE (296) 25 26 30
+    TOKEN_RIGHT_BRACE (297) 25 26 30
+    TOKEN_LEFT_BRACKET (298) 69 115
+    TOKEN_RIGHT_BRACKET (299) 69 115
+    TOKEN_TERNARY (300) 94
+    TOKEN_SEMI (301) 23 24 27 28 29 41 42 44 45 46 53 66 68 74 75 76 77
+    TOKEN_COLON (302) 36 37 38 51 94
+    TOKEN_COMMA (303) 57 60 70 71
+    TOKEN_INCREMENT (304) 121 122
+    TOKEN_DECREMENT (305) 123 124
+    TOKEN_BITWISE_AND (306) 112 113 140
+    TOKEN_BITWISE_OR (307) 141
+    TOKEN_LOGICAL_AND (308) 138
+    TOKEN_BITWISE_NOT (309) 92
+    TOKEN_BITWISE_XOR (310) 142
+    TOKEN_LOGICAL_NOT (311) 99
+    TOKEN_LOGICAL_OR (312) 139
+    TOKEN_EQUAL (313) 136
+    TOKEN_NOT_EQUAL (314) 137
+    TOKEN_LESS_THAN (315) 135
+    TOKEN_GREATER_THAN (316) 132
+    TOKEN_LESS_THAN_OR_EQUAL (317) 133
+    TOKEN_GREATER_THAN_OR_EQUAL (318) 134
+    TOKEN_RIGHT_SHIFT (319) 127
+    TOKEN_LEFT_SHIFT (320) 128
+    TOKEN_PLUS_ASSIGN (321) 143
+    TOKEN_MINUS_ASSIGN (322) 144
+    TOKEN_LEFT_SHIFT_ASSIGN (323) 146
+    TOKEN_RIGHT_SHIFT_ASSIGN (324) 147
+    TOKEN_BITWISE_AND_ASSIGN (325) 148
+    TOKEN_BITWISE_OR_ASSIGN (326) 149
+    TOKEN_BITWISE_XOR_ASSIGN (327) 150
+    TOKEN_MULTIPLY_ASSIGN (328) 151
+    TOKEN_DIVIDE_ASSIGN (329) 152
+    TOKEN_MODULUS_ASSIGN (330) 145
+    TOKEN_ARROW (331)
+    TOKEN_CONSTANT (332) 167
+    TOKEN_ASTERISK (333) 116 129 156
+    TOKEN_ADDRESS_OF (334)
+    TOKEN_DOT (335)
+    TOKEN_FNUM (336) 108 109
+    TOKEN_NUM (337) 36 69 104 105
+    TOKEN_STR (338) 111
+    TOKEN_ID (339) 29 47 51 52 55 62 63 64 65 68 70 73 78 79 106 113 115 116 121 122 123 124
+    TOKEN_CNUM (340) 37 110
+
+
+Nonterminals, with rules where they appear
+
+    $accept (86)
+        on left: 0
+    R_PROGRAM (87)
+        on left: 1 2 3
+        on right: 0 1 2
+    R_GLOBAL_STATEMENT (88)
+        on left: 4 5 6
+        on right: 2 3
+    R_LOCAL_STATEMENT_LIST (89)
+        on left: 7 8 9
+        on right: 8 25 36 37 38
+    R_LOCAL_STATEMENT (90)
+        on left: 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
+        on right: 8 9 39 40 43 45 46
+    R_COMPOUND_STATEMENT (91)
+        on left: 25 26
+        on right: 19 54
+    R_CONTINUE (92)
+        on left: 27
+        on right: 14
+    R_BREAK (93)
+        on left: 28
+        on right: 13
+    R_GOTO (94)
+        on left: 29
+        on right: 11
+    R_SWITCH (95)
+        on left: 30
+        on right: 12
+    R_SWITCH_BODY (96)
+        on left: 31 32 33
+        on right: 30
+    R_CASE_LIST (97)
+        on left: 34 35
+        on right: 31 32 34
+    R_CASE (98)
+        on left: 36 37
+        on right: 34 35
+    R_DEFAULT (99)
+        on left: 38
+        on right: 31 33
+    R_IF_STATEMENT (100)
+        on left: 39 40
+        on right: 10
+    R_RETURN (101)
+        on left: 41 42
+        on right: 20
+    R_WHILE_LOOP (102)
+        on left: 43 44
+        on right: 17
+    R_DO_WHILE_LOOP (103)
+        on left: 45
+        on right: 15
+    R_FOR_LOOP (104)
+        on left: 46
+        on right: 18
+    R_FOR_INIT_FIELD (105)
+        on left: 47
+        on right: 46
+    R_FOR_ASSIGNMENT_FIELD (106)
+        on left: 48 49 50
+        on right: 46
+    R_LABEL (107)
+        on left: 51
+        on right: 16
+    R_FUNC_SIGNATURE (108)
+        on left: 52
+        on right: 53 54
+    R_FUNC_PROTOTYPE (109)
+        on left: 53
+        on right: 5
+    R_FUNC_IMPLEMENT (110)
+        on left: 54
+        on right: 6
+    R_FUNC_CALL (111)
+        on left: 55
+        on right: 23 114
+    R_EXP_LIST (112)
+        on left: 56 57 58
+        on right: 55 57
+    R_ARG_LIST (113)
+        on left: 59 60 61
+        on right: 52 60
+    R_ARG (114)
+        on left: 62 63 64 65
+        on right: 60 61
+    R_VAR_DECLARATION (115)
+        on left: 66 67
+        on right: 4 21
+    R_ARR_DECLARATION (116)
+        on left: 68
+        on right: 67
+    R_ARR_SIZE (117)
+        on left: 69
+        on right: 68
+    R_ID_LIST (118)
+        on left: 70 71 72 73
+        on right: 66 70 71
+    R_VAR_ASSIGNMENT (119)
+        on left: 74 75 76 77
+        on right: 22
+    R_COMPOUND_VAR_ASSIGN (120)
+        on left: 78
+        on right: 49 75
+    R_SIMPLE_VAR_ASSIGN (121)
+        on left: 79
+        on right: 48 71 72 74
+    R_VAR_PREAMBLE (122)
+        on left: 80 81 82 83 84 85 86 87
+        on right: 52 66 68
+    R_EXP (123)
+        on left: 88 89 90 91 92 93 94 95
+        on right: 30 39 40 42 43 44 45 46 47 57 58 76 77 78 79 88 89 90 91 93 94 102 115
+    R_TERM (124)
+        on left: 96 97
+        on right: 89 90 91 92 93 95 96
+    R_OPERAND (125)
+        on left: 98 99 100 101
+        on right: 96 97
+    R_FACTOR (126)
+        on left: 102 103 104 105 106 107 108 109 110 111 112 113 114
+        on right: 99 100 101
+    R_ARRAY_INDEX (127)
+        on left: 115
+        on right: 76 103 112
+    R_POINTER_CONTENT (128)
+        on left: 116
+        on right: 77 107
+    R_INC_DEC (129)
+        on left: 117 118 119 120
+        on right: 24 50 98
+    R_PRE_INCREMENT (130)
+        on left: 121
+        on right: 117
+    R_POST_INCREMENT (131)
+        on left: 122
+        on right: 118
+    R_PRE_DECREMENT (132)
+        on left: 123
+        on right: 119
+    R_POST_DECREMENT (133)
+        on left: 124
+        on right: 120
+    R_ARITHMETIC_OPERATOR (134)
+        on left: 125 126 127 128
+        on right: 89
+    R_PRIORITY_OPERATOR (135)
+        on left: 129 130 131
+        on right: 96
+    R_CONDITION_OPERATOR (136)
+        on left: 132 133 134 135 136 137
+        on right: 90
+    R_LOGIC_OPERATOR (137)
+        on left: 138 139
+        on right: 93
+    R_BITWISE_OPERATOR (138)
+        on left: 140 141 142
+        on right: 91
+    R_COMPOUND_ASSIGN_OPERATOR (139)
+        on left: 143 144 145 146 147 148 149 150 151 152
+        on right: 78
+    R_TYPE_CAST (140)
+        on left: 153
+        on right: 100
+    R_TYPE_ALL (141)
+        on left: 154 155
+        on right: 62 63 64 65 80 81 82 83 84 85 86 87 153
+    R_TYPE_PTR (142)
+        on left: 156
+        on right: 155
+    R_TYPE (143)
+        on left: 157 158 159 160 161 162 163 164
+        on right: 154 156
+    R_VISIBILITY_QUALIFIER (144)
+        on left: 165 166
+        on right: 80 81 82 84
+    R_MOD_QUALIFIER (145)
+        on left: 167 168
+        on right: 62 64 80 81 83 85
+    R_SIGN_QUALIFIER (146)
+        on left: 169 170
+        on right: 62 63 80 82 83 86
+
+
+State 0
+
+    0 $accept: • R_PROGRAM $end
+
+    TOKEN_INT       shift, and go to state 1
+    TOKEN_FLOAT     shift, and go to state 2
+    TOKEN_DOUBLE    shift, and go to state 3
+    TOKEN_CHAR      shift, and go to state 4
+    TOKEN_VOID      shift, and go to state 5
+    TOKEN_EXTERN    shift, and go to state 6
+    TOKEN_LONG      shift, and go to state 7
+    TOKEN_SHORT     shift, and go to state 8
+    TOKEN_STATIC    shift, and go to state 9
+    TOKEN_SIGNED    shift, and go to state 10
+    TOKEN_UNSIGNED  shift, and go to state 11
+    TOKEN_VOLATILE  shift, and go to state 12
+    TOKEN_CONSTANT  shift, and go to state 13
+
+    R_PROGRAM               go to state 14
+    R_GLOBAL_STATEMENT      go to state 15
+    R_FUNC_SIGNATURE        go to state 16
+    R_FUNC_PROTOTYPE        go to state 17
+    R_FUNC_IMPLEMENT        go to state 18
+    R_VAR_DECLARATION       go to state 19
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_PREAMBLE          go to state 21
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 1
+
+  159 R_TYPE: TOKEN_INT •
+
+    $default  reduce using rule 159 (R_TYPE)
+
+
+State 2
+
+  161 R_TYPE: TOKEN_FLOAT •
+
+    $default  reduce using rule 161 (R_TYPE)
+
+
+State 3
+
+  162 R_TYPE: TOKEN_DOUBLE •
+
+    $default  reduce using rule 162 (R_TYPE)
+
+
+State 4
+
+  157 R_TYPE: TOKEN_CHAR •
+
+    $default  reduce using rule 157 (R_TYPE)
+
+
+State 5
+
+  164 R_TYPE: TOKEN_VOID •
+
+    $default  reduce using rule 164 (R_TYPE)
+
+
+State 6
+
+  166 R_VISIBILITY_QUALIFIER: TOKEN_EXTERN •
+
+    $default  reduce using rule 166 (R_VISIBILITY_QUALIFIER)
+
+
+State 7
+
+  160 R_TYPE: TOKEN_LONG •
+  163       | TOKEN_LONG • TOKEN_DOUBLE
+
+    TOKEN_DOUBLE  shift, and go to state 28
+
+    $default  reduce using rule 160 (R_TYPE)
+
+
+State 8
+
+  158 R_TYPE: TOKEN_SHORT •
+
+    $default  reduce using rule 158 (R_TYPE)
+
+
+State 9
+
+  165 R_VISIBILITY_QUALIFIER: TOKEN_STATIC •
+
+    $default  reduce using rule 165 (R_VISIBILITY_QUALIFIER)
+
+
+State 10
+
+  169 R_SIGN_QUALIFIER: TOKEN_SIGNED •
+
+    $default  reduce using rule 169 (R_SIGN_QUALIFIER)
+
+
+State 11
+
+  170 R_SIGN_QUALIFIER: TOKEN_UNSIGNED •
+
+    $default  reduce using rule 170 (R_SIGN_QUALIFIER)
+
+
+State 12
+
+  168 R_MOD_QUALIFIER: TOKEN_VOLATILE •
+
+    $default  reduce using rule 168 (R_MOD_QUALIFIER)
+
+
+State 13
+
+  167 R_MOD_QUALIFIER: TOKEN_CONSTANT •
+
+    $default  reduce using rule 167 (R_MOD_QUALIFIER)
+
+
+State 14
+
+    0 $accept: R_PROGRAM • $end
+    1 R_PROGRAM: R_PROGRAM • TOKEN_EOF
+    2          | R_PROGRAM • R_GLOBAL_STATEMENT
+
+    $end            shift, and go to state 29
+    TOKEN_EOF       shift, and go to state 30
+    TOKEN_INT       shift, and go to state 1
+    TOKEN_FLOAT     shift, and go to state 2
+    TOKEN_DOUBLE    shift, and go to state 3
+    TOKEN_CHAR      shift, and go to state 4
+    TOKEN_VOID      shift, and go to state 5
+    TOKEN_EXTERN    shift, and go to state 6
+    TOKEN_LONG      shift, and go to state 7
+    TOKEN_SHORT     shift, and go to state 8
+    TOKEN_STATIC    shift, and go to state 9
+    TOKEN_SIGNED    shift, and go to state 10
+    TOKEN_UNSIGNED  shift, and go to state 11
+    TOKEN_VOLATILE  shift, and go to state 12
+    TOKEN_CONSTANT  shift, and go to state 13
+
+    R_GLOBAL_STATEMENT      go to state 31
+    R_FUNC_SIGNATURE        go to state 16
+    R_FUNC_PROTOTYPE        go to state 17
+    R_FUNC_IMPLEMENT        go to state 18
+    R_VAR_DECLARATION       go to state 19
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_PREAMBLE          go to state 21
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 15
+
+    3 R_PROGRAM: R_GLOBAL_STATEMENT •
+
+    $default  reduce using rule 3 (R_PROGRAM)
+
+
+State 16
+
+   53 R_FUNC_PROTOTYPE: R_FUNC_SIGNATURE • TOKEN_SEMI
+   54 R_FUNC_IMPLEMENT: R_FUNC_SIGNATURE • R_COMPOUND_STATEMENT
+
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_SEMI        shift, and go to state 33
+
+    R_COMPOUND_STATEMENT  go to state 34
+
+
+State 17
+
+    5 R_GLOBAL_STATEMENT: R_FUNC_PROTOTYPE •
+
+    $default  reduce using rule 5 (R_GLOBAL_STATEMENT)
+
+
+State 18
+
+    6 R_GLOBAL_STATEMENT: R_FUNC_IMPLEMENT •
+
+    $default  reduce using rule 6 (R_GLOBAL_STATEMENT)
+
+
+State 19
+
+    4 R_GLOBAL_STATEMENT: R_VAR_DECLARATION •
+
+    $default  reduce using rule 4 (R_GLOBAL_STATEMENT)
+
+
+State 20
+
+   67 R_VAR_DECLARATION: R_ARR_DECLARATION •
+
+    $default  reduce using rule 67 (R_VAR_DECLARATION)
+
+
+State 21
+
+   52 R_FUNC_SIGNATURE: R_VAR_PREAMBLE • TOKEN_ID TOKEN_LEFT_PARENTHESES R_ARG_LIST TOKEN_RIGHT_PARENTHESES
+   66 R_VAR_DECLARATION: R_VAR_PREAMBLE • R_ID_LIST TOKEN_SEMI
+   68 R_ARR_DECLARATION: R_VAR_PREAMBLE • TOKEN_ID R_ARR_SIZE TOKEN_SEMI
+
+    TOKEN_ID  shift, and go to state 35
+
+    R_ID_LIST            go to state 36
+    R_SIMPLE_VAR_ASSIGN  go to state 37
+
+
+State 22
+
+   87 R_VAR_PREAMBLE: R_TYPE_ALL •
+
+    $default  reduce using rule 87 (R_VAR_PREAMBLE)
+
+
+State 23
+
+  155 R_TYPE_ALL: R_TYPE_PTR •
+
+    $default  reduce using rule 155 (R_TYPE_ALL)
+
+
+State 24
+
+  154 R_TYPE_ALL: R_TYPE •
+  156 R_TYPE_PTR: R_TYPE • TOKEN_ASTERISK
+
+    TOKEN_ASTERISK  shift, and go to state 38
+
+    $default  reduce using rule 154 (R_TYPE_ALL)
+
+
+State 25
+
+   80 R_VAR_PREAMBLE: R_VISIBILITY_QUALIFIER • R_MOD_QUALIFIER R_SIGN_QUALIFIER R_TYPE_ALL
+   81               | R_VISIBILITY_QUALIFIER • R_MOD_QUALIFIER R_TYPE_ALL
+   82               | R_VISIBILITY_QUALIFIER • R_SIGN_QUALIFIER R_TYPE_ALL
+   84               | R_VISIBILITY_QUALIFIER • R_TYPE_ALL
+
+    TOKEN_INT       shift, and go to state 1
+    TOKEN_FLOAT     shift, and go to state 2
+    TOKEN_DOUBLE    shift, and go to state 3
+    TOKEN_CHAR      shift, and go to state 4
+    TOKEN_VOID      shift, and go to state 5
+    TOKEN_LONG      shift, and go to state 7
+    TOKEN_SHORT     shift, and go to state 8
+    TOKEN_SIGNED    shift, and go to state 10
+    TOKEN_UNSIGNED  shift, and go to state 11
+    TOKEN_VOLATILE  shift, and go to state 12
+    TOKEN_CONSTANT  shift, and go to state 13
+
+    R_TYPE_ALL        go to state 39
+    R_TYPE_PTR        go to state 23
+    R_TYPE            go to state 24
+    R_MOD_QUALIFIER   go to state 40
+    R_SIGN_QUALIFIER  go to state 41
+
+
+State 26
+
+   83 R_VAR_PREAMBLE: R_MOD_QUALIFIER • R_SIGN_QUALIFIER R_TYPE_ALL
+   85               | R_MOD_QUALIFIER • R_TYPE_ALL
+
+    TOKEN_INT       shift, and go to state 1
+    TOKEN_FLOAT     shift, and go to state 2
+    TOKEN_DOUBLE    shift, and go to state 3
+    TOKEN_CHAR      shift, and go to state 4
+    TOKEN_VOID      shift, and go to state 5
+    TOKEN_LONG      shift, and go to state 7
+    TOKEN_SHORT     shift, and go to state 8
+    TOKEN_SIGNED    shift, and go to state 10
+    TOKEN_UNSIGNED  shift, and go to state 11
+
+    R_TYPE_ALL        go to state 42
+    R_TYPE_PTR        go to state 23
+    R_TYPE            go to state 24
+    R_SIGN_QUALIFIER  go to state 43
+
+
+State 27
+
+   86 R_VAR_PREAMBLE: R_SIGN_QUALIFIER • R_TYPE_ALL
+
+    TOKEN_INT     shift, and go to state 1
+    TOKEN_FLOAT   shift, and go to state 2
+    TOKEN_DOUBLE  shift, and go to state 3
+    TOKEN_CHAR    shift, and go to state 4
+    TOKEN_VOID    shift, and go to state 5
+    TOKEN_LONG    shift, and go to state 7
+    TOKEN_SHORT   shift, and go to state 8
+
+    R_TYPE_ALL  go to state 44
+    R_TYPE_PTR  go to state 23
+    R_TYPE      go to state 24
+
+
+State 28
+
+  163 R_TYPE: TOKEN_LONG TOKEN_DOUBLE •
+
+    $default  reduce using rule 163 (R_TYPE)
+
+
+State 29
+
+    0 $accept: R_PROGRAM $end •
+
+    $default  accept
+
+
+State 30
+
+    1 R_PROGRAM: R_PROGRAM TOKEN_EOF •
+
+    $default  reduce using rule 1 (R_PROGRAM)
+
+
+State 31
+
+    2 R_PROGRAM: R_PROGRAM R_GLOBAL_STATEMENT •
+
+    $default  reduce using rule 2 (R_PROGRAM)
+
+
+State 32
+
+   25 R_COMPOUND_STATEMENT: TOKEN_LEFT_BRACE • R_LOCAL_STATEMENT_LIST TOKEN_RIGHT_BRACE
+   26                     | TOKEN_LEFT_BRACE • TOKEN_RIGHT_BRACE
+
+    TOKEN_IF           shift, and go to state 45
+    TOKEN_DO           shift, and go to state 46
+    TOKEN_WHILE        shift, and go to state 47
+    TOKEN_FOR          shift, and go to state 48
+    TOKEN_SWITCH       shift, and go to state 49
+    TOKEN_RETURN       shift, and go to state 50
+    TOKEN_BREAK        shift, and go to state 51
+    TOKEN_INT          shift, and go to state 1
+    TOKEN_FLOAT        shift, and go to state 2
+    TOKEN_DOUBLE       shift, and go to state 3
+    TOKEN_CHAR         shift, and go to state 4
+    TOKEN_VOID         shift, and go to state 5
+    TOKEN_CONTINUE     shift, and go to state 52
+    TOKEN_EXTERN       shift, and go to state 6
+    TOKEN_GOTO         shift, and go to state 53
+    TOKEN_LONG         shift, and go to state 7
+    TOKEN_SHORT        shift, and go to state 8
+    TOKEN_STATIC       shift, and go to state 9
+    TOKEN_SIGNED       shift, and go to state 10
+    TOKEN_UNSIGNED     shift, and go to state 11
+    TOKEN_VOLATILE     shift, and go to state 12
+    TOKEN_LEFT_BRACE   shift, and go to state 32
+    TOKEN_RIGHT_BRACE  shift, and go to state 54
+    TOKEN_INCREMENT    shift, and go to state 55
+    TOKEN_DECREMENT    shift, and go to state 56
+    TOKEN_CONSTANT     shift, and go to state 13
+    TOKEN_ASTERISK     shift, and go to state 57
+    TOKEN_ID           shift, and go to state 58
+
+    TOKEN_IF           [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DO           [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_WHILE        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_FOR          [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SWITCH       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_RETURN       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_BREAK        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_INT          [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_FLOAT        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DOUBLE       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CHAR         [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_VOID         [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CONTINUE     [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_EXTERN       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_GOTO         [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_LONG         [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SHORT        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_STATIC       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SIGNED       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_UNSIGNED     [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_VOLATILE     [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_LEFT_BRACE   [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_RIGHT_BRACE  [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_INCREMENT    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DECREMENT    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CONSTANT     [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_ASTERISK     [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_ID           [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+
+    R_LOCAL_STATEMENT_LIST  go to state 59
+    R_LOCAL_STATEMENT       go to state 60
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 33
+
+   53 R_FUNC_PROTOTYPE: R_FUNC_SIGNATURE TOKEN_SEMI •
+
+    $default  reduce using rule 53 (R_FUNC_PROTOTYPE)
+
+
+State 34
+
+   54 R_FUNC_IMPLEMENT: R_FUNC_SIGNATURE R_COMPOUND_STATEMENT •
+
+    $default  reduce using rule 54 (R_FUNC_IMPLEMENT)
+
+
+State 35
+
+   52 R_FUNC_SIGNATURE: R_VAR_PREAMBLE TOKEN_ID • TOKEN_LEFT_PARENTHESES R_ARG_LIST TOKEN_RIGHT_PARENTHESES
+   68 R_ARR_DECLARATION: R_VAR_PREAMBLE TOKEN_ID • R_ARR_SIZE TOKEN_SEMI
+   73 R_ID_LIST: TOKEN_ID •
+   79 R_SIMPLE_VAR_ASSIGN: TOKEN_ID • TOKEN_ASSIGN R_EXP
+
+    TOKEN_ASSIGN            shift, and go to state 85
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 86
+    TOKEN_LEFT_BRACKET      shift, and go to state 87
+
+    $default  reduce using rule 73 (R_ID_LIST)
+
+    R_ARR_SIZE  go to state 88
+
+
+State 36
+
+   66 R_VAR_DECLARATION: R_VAR_PREAMBLE R_ID_LIST • TOKEN_SEMI
+   70 R_ID_LIST: R_ID_LIST • TOKEN_COMMA TOKEN_ID
+   71          | R_ID_LIST • TOKEN_COMMA R_SIMPLE_VAR_ASSIGN
+
+    TOKEN_SEMI   shift, and go to state 89
+    TOKEN_COMMA  shift, and go to state 90
+
+
+State 37
+
+   72 R_ID_LIST: R_SIMPLE_VAR_ASSIGN •
+
+    $default  reduce using rule 72 (R_ID_LIST)
+
+
+State 38
+
+  156 R_TYPE_PTR: R_TYPE TOKEN_ASTERISK •
+
+    $default  reduce using rule 156 (R_TYPE_PTR)
+
+
+State 39
+
+   84 R_VAR_PREAMBLE: R_VISIBILITY_QUALIFIER R_TYPE_ALL •
+
+    $default  reduce using rule 84 (R_VAR_PREAMBLE)
+
+
+State 40
+
+   80 R_VAR_PREAMBLE: R_VISIBILITY_QUALIFIER R_MOD_QUALIFIER • R_SIGN_QUALIFIER R_TYPE_ALL
+   81               | R_VISIBILITY_QUALIFIER R_MOD_QUALIFIER • R_TYPE_ALL
+
+    TOKEN_INT       shift, and go to state 1
+    TOKEN_FLOAT     shift, and go to state 2
+    TOKEN_DOUBLE    shift, and go to state 3
+    TOKEN_CHAR      shift, and go to state 4
+    TOKEN_VOID      shift, and go to state 5
+    TOKEN_LONG      shift, and go to state 7
+    TOKEN_SHORT     shift, and go to state 8
+    TOKEN_SIGNED    shift, and go to state 10
+    TOKEN_UNSIGNED  shift, and go to state 11
+
+    R_TYPE_ALL        go to state 91
+    R_TYPE_PTR        go to state 23
+    R_TYPE            go to state 24
+    R_SIGN_QUALIFIER  go to state 92
+
+
+State 41
+
+   82 R_VAR_PREAMBLE: R_VISIBILITY_QUALIFIER R_SIGN_QUALIFIER • R_TYPE_ALL
+
+    TOKEN_INT     shift, and go to state 1
+    TOKEN_FLOAT   shift, and go to state 2
+    TOKEN_DOUBLE  shift, and go to state 3
+    TOKEN_CHAR    shift, and go to state 4
+    TOKEN_VOID    shift, and go to state 5
+    TOKEN_LONG    shift, and go to state 7
+    TOKEN_SHORT   shift, and go to state 8
+
+    R_TYPE_ALL  go to state 93
+    R_TYPE_PTR  go to state 23
+    R_TYPE      go to state 24
+
+
+State 42
+
+   85 R_VAR_PREAMBLE: R_MOD_QUALIFIER R_TYPE_ALL •
+
+    $default  reduce using rule 85 (R_VAR_PREAMBLE)
+
+
+State 43
+
+   83 R_VAR_PREAMBLE: R_MOD_QUALIFIER R_SIGN_QUALIFIER • R_TYPE_ALL
+
+    TOKEN_INT     shift, and go to state 1
+    TOKEN_FLOAT   shift, and go to state 2
+    TOKEN_DOUBLE  shift, and go to state 3
+    TOKEN_CHAR    shift, and go to state 4
+    TOKEN_VOID    shift, and go to state 5
+    TOKEN_LONG    shift, and go to state 7
+    TOKEN_SHORT   shift, and go to state 8
+
+    R_TYPE_ALL  go to state 94
+    R_TYPE_PTR  go to state 23
+    R_TYPE      go to state 24
+
+
+State 44
+
+   86 R_VAR_PREAMBLE: R_SIGN_QUALIFIER R_TYPE_ALL •
+
+    $default  reduce using rule 86 (R_VAR_PREAMBLE)
+
+
+State 45
+
+   39 R_IF_STATEMENT: TOKEN_IF • TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+   40               | TOKEN_IF • TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT TOKEN_ELSE R_LOCAL_STATEMENT
+
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 95
+
+
+State 46
+
+   45 R_DO_WHILE_LOOP: TOKEN_DO • R_LOCAL_STATEMENT TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_SEMI
+
+    TOKEN_IF          shift, and go to state 45
+    TOKEN_DO          shift, and go to state 46
+    TOKEN_WHILE       shift, and go to state 47
+    TOKEN_FOR         shift, and go to state 48
+    TOKEN_SWITCH      shift, and go to state 49
+    TOKEN_RETURN      shift, and go to state 50
+    TOKEN_BREAK       shift, and go to state 51
+    TOKEN_INT         shift, and go to state 1
+    TOKEN_FLOAT       shift, and go to state 2
+    TOKEN_DOUBLE      shift, and go to state 3
+    TOKEN_CHAR        shift, and go to state 4
+    TOKEN_VOID        shift, and go to state 5
+    TOKEN_CONTINUE    shift, and go to state 52
+    TOKEN_EXTERN      shift, and go to state 6
+    TOKEN_GOTO        shift, and go to state 53
+    TOKEN_LONG        shift, and go to state 7
+    TOKEN_SHORT       shift, and go to state 8
+    TOKEN_STATIC      shift, and go to state 9
+    TOKEN_SIGNED      shift, and go to state 10
+    TOKEN_UNSIGNED    shift, and go to state 11
+    TOKEN_VOLATILE    shift, and go to state 12
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_INCREMENT   shift, and go to state 55
+    TOKEN_DECREMENT   shift, and go to state 56
+    TOKEN_CONSTANT    shift, and go to state 13
+    TOKEN_ASTERISK    shift, and go to state 57
+    TOKEN_ID          shift, and go to state 58
+
+    R_LOCAL_STATEMENT       go to state 96
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 47
+
+   43 R_WHILE_LOOP: TOKEN_WHILE • TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+   44             | TOKEN_WHILE • TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_SEMI
+
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 97
+
+
+State 48
+
+   46 R_FOR_LOOP: TOKEN_FOR • TOKEN_LEFT_PARENTHESES R_FOR_INIT_FIELD TOKEN_SEMI R_EXP TOKEN_SEMI R_FOR_ASSIGNMENT_FIELD TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 98
+
+
+State 49
+
+   30 R_SWITCH: TOKEN_SWITCH • TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_LEFT_BRACE R_SWITCH_BODY TOKEN_RIGHT_BRACE
+
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 99
+
+
+State 50
+
+   41 R_RETURN: TOKEN_RETURN • TOKEN_SEMI
+   42         | TOKEN_RETURN • R_EXP TOKEN_SEMI
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_SEMI              shift, and go to state 102
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 112
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 51
+
+   28 R_BREAK: TOKEN_BREAK • TOKEN_SEMI
+
+    TOKEN_SEMI  shift, and go to state 120
+
+
+State 52
+
+   27 R_CONTINUE: TOKEN_CONTINUE • TOKEN_SEMI
+
+    TOKEN_SEMI  shift, and go to state 121
+
+
+State 53
+
+   29 R_GOTO: TOKEN_GOTO • TOKEN_ID TOKEN_SEMI
+
+    TOKEN_ID  shift, and go to state 122
+
+
+State 54
+
+   26 R_COMPOUND_STATEMENT: TOKEN_LEFT_BRACE TOKEN_RIGHT_BRACE •
+
+    $default  reduce using rule 26 (R_COMPOUND_STATEMENT)
+
+
+State 55
+
+  121 R_PRE_INCREMENT: TOKEN_INCREMENT • TOKEN_ID
+
+    TOKEN_ID  shift, and go to state 123
+
+
+State 56
+
+  123 R_PRE_DECREMENT: TOKEN_DECREMENT • TOKEN_ID
+
+    TOKEN_ID  shift, and go to state 124
+
+
+State 57
+
+  116 R_POINTER_CONTENT: TOKEN_ASTERISK • TOKEN_ID
+
+    TOKEN_ID  shift, and go to state 125
+
+
+State 58
+
+   51 R_LABEL: TOKEN_ID • TOKEN_COLON
+   55 R_FUNC_CALL: TOKEN_ID • TOKEN_LEFT_PARENTHESES R_EXP_LIST TOKEN_RIGHT_PARENTHESES
+   78 R_COMPOUND_VAR_ASSIGN: TOKEN_ID • R_COMPOUND_ASSIGN_OPERATOR R_EXP
+   79 R_SIMPLE_VAR_ASSIGN: TOKEN_ID • TOKEN_ASSIGN R_EXP
+  115 R_ARRAY_INDEX: TOKEN_ID • TOKEN_LEFT_BRACKET R_EXP TOKEN_RIGHT_BRACKET
+  122 R_POST_INCREMENT: TOKEN_ID • TOKEN_INCREMENT
+  124 R_POST_DECREMENT: TOKEN_ID • TOKEN_DECREMENT
+
+    TOKEN_ASSIGN              shift, and go to state 85
+    TOKEN_LEFT_PARENTHESES    shift, and go to state 126
+    TOKEN_LEFT_BRACKET        shift, and go to state 127
+    TOKEN_COLON               shift, and go to state 128
+    TOKEN_INCREMENT           shift, and go to state 129
+    TOKEN_DECREMENT           shift, and go to state 130
+    TOKEN_PLUS_ASSIGN         shift, and go to state 131
+    TOKEN_MINUS_ASSIGN        shift, and go to state 132
+    TOKEN_LEFT_SHIFT_ASSIGN   shift, and go to state 133
+    TOKEN_RIGHT_SHIFT_ASSIGN  shift, and go to state 134
+    TOKEN_BITWISE_AND_ASSIGN  shift, and go to state 135
+    TOKEN_BITWISE_OR_ASSIGN   shift, and go to state 136
+    TOKEN_BITWISE_XOR_ASSIGN  shift, and go to state 137
+    TOKEN_MULTIPLY_ASSIGN     shift, and go to state 138
+    TOKEN_DIVIDE_ASSIGN       shift, and go to state 139
+    TOKEN_MODULUS_ASSIGN      shift, and go to state 140
+
+    R_COMPOUND_ASSIGN_OPERATOR  go to state 141
+
+
+State 59
+
+    8 R_LOCAL_STATEMENT_LIST: R_LOCAL_STATEMENT_LIST • R_LOCAL_STATEMENT
+   25 R_COMPOUND_STATEMENT: TOKEN_LEFT_BRACE R_LOCAL_STATEMENT_LIST • TOKEN_RIGHT_BRACE
+
+    TOKEN_IF           shift, and go to state 45
+    TOKEN_DO           shift, and go to state 46
+    TOKEN_WHILE        shift, and go to state 47
+    TOKEN_FOR          shift, and go to state 48
+    TOKEN_SWITCH       shift, and go to state 49
+    TOKEN_RETURN       shift, and go to state 50
+    TOKEN_BREAK        shift, and go to state 51
+    TOKEN_INT          shift, and go to state 1
+    TOKEN_FLOAT        shift, and go to state 2
+    TOKEN_DOUBLE       shift, and go to state 3
+    TOKEN_CHAR         shift, and go to state 4
+    TOKEN_VOID         shift, and go to state 5
+    TOKEN_CONTINUE     shift, and go to state 52
+    TOKEN_EXTERN       shift, and go to state 6
+    TOKEN_GOTO         shift, and go to state 53
+    TOKEN_LONG         shift, and go to state 7
+    TOKEN_SHORT        shift, and go to state 8
+    TOKEN_STATIC       shift, and go to state 9
+    TOKEN_SIGNED       shift, and go to state 10
+    TOKEN_UNSIGNED     shift, and go to state 11
+    TOKEN_VOLATILE     shift, and go to state 12
+    TOKEN_LEFT_BRACE   shift, and go to state 32
+    TOKEN_RIGHT_BRACE  shift, and go to state 142
+    TOKEN_INCREMENT    shift, and go to state 55
+    TOKEN_DECREMENT    shift, and go to state 56
+    TOKEN_CONSTANT     shift, and go to state 13
+    TOKEN_ASTERISK     shift, and go to state 57
+    TOKEN_ID           shift, and go to state 58
+
+    R_LOCAL_STATEMENT       go to state 143
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 60
+
+    9 R_LOCAL_STATEMENT_LIST: R_LOCAL_STATEMENT •
+
+    $default  reduce using rule 9 (R_LOCAL_STATEMENT_LIST)
+
+
+State 61
+
+   19 R_LOCAL_STATEMENT: R_COMPOUND_STATEMENT •
+
+    $default  reduce using rule 19 (R_LOCAL_STATEMENT)
+
+
+State 62
+
+   14 R_LOCAL_STATEMENT: R_CONTINUE •
+
+    $default  reduce using rule 14 (R_LOCAL_STATEMENT)
+
+
+State 63
+
+   13 R_LOCAL_STATEMENT: R_BREAK •
+
+    $default  reduce using rule 13 (R_LOCAL_STATEMENT)
+
+
+State 64
+
+   11 R_LOCAL_STATEMENT: R_GOTO •
+
+    $default  reduce using rule 11 (R_LOCAL_STATEMENT)
+
+
+State 65
+
+   12 R_LOCAL_STATEMENT: R_SWITCH •
+
+    $default  reduce using rule 12 (R_LOCAL_STATEMENT)
+
+
+State 66
+
+   10 R_LOCAL_STATEMENT: R_IF_STATEMENT •
+
+    $default  reduce using rule 10 (R_LOCAL_STATEMENT)
+
+
+State 67
+
+   20 R_LOCAL_STATEMENT: R_RETURN •
+
+    $default  reduce using rule 20 (R_LOCAL_STATEMENT)
+
+
+State 68
+
+   17 R_LOCAL_STATEMENT: R_WHILE_LOOP •
+
+    $default  reduce using rule 17 (R_LOCAL_STATEMENT)
+
+
+State 69
+
+   15 R_LOCAL_STATEMENT: R_DO_WHILE_LOOP •
+
+    $default  reduce using rule 15 (R_LOCAL_STATEMENT)
+
+
+State 70
+
+   18 R_LOCAL_STATEMENT: R_FOR_LOOP •
+
+    $default  reduce using rule 18 (R_LOCAL_STATEMENT)
+
+
+State 71
+
+   16 R_LOCAL_STATEMENT: R_LABEL •
+
+    $default  reduce using rule 16 (R_LOCAL_STATEMENT)
+
+
+State 72
+
+   23 R_LOCAL_STATEMENT: R_FUNC_CALL • TOKEN_SEMI
+
+    TOKEN_SEMI  shift, and go to state 144
+
+
+State 73
+
+   21 R_LOCAL_STATEMENT: R_VAR_DECLARATION •
+
+    $default  reduce using rule 21 (R_LOCAL_STATEMENT)
+
+
+State 74
+
+   22 R_LOCAL_STATEMENT: R_VAR_ASSIGNMENT •
+
+    $default  reduce using rule 22 (R_LOCAL_STATEMENT)
+
+
+State 75
+
+   75 R_VAR_ASSIGNMENT: R_COMPOUND_VAR_ASSIGN • TOKEN_SEMI
+
+    TOKEN_SEMI  shift, and go to state 145
+
+
+State 76
+
+   74 R_VAR_ASSIGNMENT: R_SIMPLE_VAR_ASSIGN • TOKEN_SEMI
+
+    TOKEN_SEMI  shift, and go to state 146
+
+
+State 77
+
+   66 R_VAR_DECLARATION: R_VAR_PREAMBLE • R_ID_LIST TOKEN_SEMI
+   68 R_ARR_DECLARATION: R_VAR_PREAMBLE • TOKEN_ID R_ARR_SIZE TOKEN_SEMI
+
+    TOKEN_ID  shift, and go to state 147
+
+    R_ID_LIST            go to state 36
+    R_SIMPLE_VAR_ASSIGN  go to state 37
+
+
+State 78
+
+   76 R_VAR_ASSIGNMENT: R_ARRAY_INDEX • TOKEN_ASSIGN R_EXP TOKEN_SEMI
+
+    TOKEN_ASSIGN  shift, and go to state 148
+
+
+State 79
+
+   77 R_VAR_ASSIGNMENT: R_POINTER_CONTENT • TOKEN_ASSIGN R_EXP TOKEN_SEMI
+
+    TOKEN_ASSIGN  shift, and go to state 149
+
+
+State 80
+
+   24 R_LOCAL_STATEMENT: R_INC_DEC • TOKEN_SEMI
+
+    TOKEN_SEMI  shift, and go to state 150
+
+
+State 81
+
+  117 R_INC_DEC: R_PRE_INCREMENT •
+
+    $default  reduce using rule 117 (R_INC_DEC)
+
+
+State 82
+
+  118 R_INC_DEC: R_POST_INCREMENT •
+
+    $default  reduce using rule 118 (R_INC_DEC)
+
+
+State 83
+
+  119 R_INC_DEC: R_PRE_DECREMENT •
+
+    $default  reduce using rule 119 (R_INC_DEC)
+
+
+State 84
+
+  120 R_INC_DEC: R_POST_DECREMENT •
+
+    $default  reduce using rule 120 (R_INC_DEC)
+
+
+State 85
+
+   79 R_SIMPLE_VAR_ASSIGN: TOKEN_ID TOKEN_ASSIGN • R_EXP
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 151
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 86
+
+   52 R_FUNC_SIGNATURE: R_VAR_PREAMBLE TOKEN_ID TOKEN_LEFT_PARENTHESES • R_ARG_LIST TOKEN_RIGHT_PARENTHESES
+
+    TOKEN_INT       shift, and go to state 1
+    TOKEN_FLOAT     shift, and go to state 2
+    TOKEN_DOUBLE    shift, and go to state 3
+    TOKEN_CHAR      shift, and go to state 4
+    TOKEN_VOID      shift, and go to state 5
+    TOKEN_LONG      shift, and go to state 7
+    TOKEN_SHORT     shift, and go to state 8
+    TOKEN_SIGNED    shift, and go to state 10
+    TOKEN_UNSIGNED  shift, and go to state 11
+    TOKEN_VOLATILE  shift, and go to state 12
+    TOKEN_CONSTANT  shift, and go to state 13
+
+    $default  reduce using rule 59 (R_ARG_LIST)
+
+    R_ARG_LIST        go to state 152
+    R_ARG             go to state 153
+    R_TYPE_ALL        go to state 154
+    R_TYPE_PTR        go to state 23
+    R_TYPE            go to state 24
+    R_MOD_QUALIFIER   go to state 155
+    R_SIGN_QUALIFIER  go to state 156
+
+
+State 87
+
+   69 R_ARR_SIZE: TOKEN_LEFT_BRACKET • TOKEN_NUM TOKEN_RIGHT_BRACKET
+
+    TOKEN_NUM  shift, and go to state 157
+
+
+State 88
+
+   68 R_ARR_DECLARATION: R_VAR_PREAMBLE TOKEN_ID R_ARR_SIZE • TOKEN_SEMI
+
+    TOKEN_SEMI  shift, and go to state 158
+
+
+State 89
+
+   66 R_VAR_DECLARATION: R_VAR_PREAMBLE R_ID_LIST TOKEN_SEMI •
+
+    $default  reduce using rule 66 (R_VAR_DECLARATION)
+
+
+State 90
+
+   70 R_ID_LIST: R_ID_LIST TOKEN_COMMA • TOKEN_ID
+   71          | R_ID_LIST TOKEN_COMMA • R_SIMPLE_VAR_ASSIGN
+
+    TOKEN_ID  shift, and go to state 159
+
+    R_SIMPLE_VAR_ASSIGN  go to state 160
+
+
+State 91
+
+   81 R_VAR_PREAMBLE: R_VISIBILITY_QUALIFIER R_MOD_QUALIFIER R_TYPE_ALL •
+
+    $default  reduce using rule 81 (R_VAR_PREAMBLE)
+
+
+State 92
+
+   80 R_VAR_PREAMBLE: R_VISIBILITY_QUALIFIER R_MOD_QUALIFIER R_SIGN_QUALIFIER • R_TYPE_ALL
+
+    TOKEN_INT     shift, and go to state 1
+    TOKEN_FLOAT   shift, and go to state 2
+    TOKEN_DOUBLE  shift, and go to state 3
+    TOKEN_CHAR    shift, and go to state 4
+    TOKEN_VOID    shift, and go to state 5
+    TOKEN_LONG    shift, and go to state 7
+    TOKEN_SHORT   shift, and go to state 8
+
+    R_TYPE_ALL  go to state 161
+    R_TYPE_PTR  go to state 23
+    R_TYPE      go to state 24
+
+
+State 93
+
+   82 R_VAR_PREAMBLE: R_VISIBILITY_QUALIFIER R_SIGN_QUALIFIER R_TYPE_ALL •
+
+    $default  reduce using rule 82 (R_VAR_PREAMBLE)
+
+
+State 94
+
+   83 R_VAR_PREAMBLE: R_MOD_QUALIFIER R_SIGN_QUALIFIER R_TYPE_ALL •
+
+    $default  reduce using rule 83 (R_VAR_PREAMBLE)
+
+
+State 95
+
+   39 R_IF_STATEMENT: TOKEN_IF TOKEN_LEFT_PARENTHESES • R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+   40               | TOKEN_IF TOKEN_LEFT_PARENTHESES • R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT TOKEN_ELSE R_LOCAL_STATEMENT
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 162
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 96
+
+   45 R_DO_WHILE_LOOP: TOKEN_DO R_LOCAL_STATEMENT • TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_SEMI
+
+    TOKEN_WHILE  shift, and go to state 163
+
+
+State 97
+
+   43 R_WHILE_LOOP: TOKEN_WHILE TOKEN_LEFT_PARENTHESES • R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+   44             | TOKEN_WHILE TOKEN_LEFT_PARENTHESES • R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_SEMI
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 164
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 98
+
+   46 R_FOR_LOOP: TOKEN_FOR TOKEN_LEFT_PARENTHESES • R_FOR_INIT_FIELD TOKEN_SEMI R_EXP TOKEN_SEMI R_FOR_ASSIGNMENT_FIELD TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+
+    TOKEN_ID  shift, and go to state 165
+
+    R_FOR_INIT_FIELD  go to state 166
+
+
+State 99
+
+   30 R_SWITCH: TOKEN_SWITCH TOKEN_LEFT_PARENTHESES • R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_LEFT_BRACE R_SWITCH_BODY TOKEN_RIGHT_BRACE
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 167
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 100
+
+   88 R_EXP: TOKEN_MINUS • R_EXP
+  104 R_FACTOR: TOKEN_MINUS • TOKEN_NUM
+  108         | TOKEN_MINUS • TOKEN_FNUM
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 168
+    TOKEN_NUM               shift, and go to state 169
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 170
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 101
+
+  102 R_FACTOR: TOKEN_LEFT_PARENTHESES • R_EXP TOKEN_RIGHT_PARENTHESES
+  153 R_TYPE_CAST: TOKEN_LEFT_PARENTHESES • R_TYPE_ALL TOKEN_RIGHT_PARENTHESES
+
+    TOKEN_INT               shift, and go to state 1
+    TOKEN_FLOAT             shift, and go to state 2
+    TOKEN_DOUBLE            shift, and go to state 3
+    TOKEN_CHAR              shift, and go to state 4
+    TOKEN_VOID              shift, and go to state 5
+    TOKEN_LONG              shift, and go to state 7
+    TOKEN_SHORT             shift, and go to state 8
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 171
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+    R_TYPE_ALL         go to state 172
+    R_TYPE_PTR         go to state 23
+    R_TYPE             go to state 24
+
+
+State 102
+
+   41 R_RETURN: TOKEN_RETURN TOKEN_SEMI •
+
+    $default  reduce using rule 41 (R_RETURN)
+
+
+State 103
+
+  112 R_FACTOR: TOKEN_BITWISE_AND • R_ARRAY_INDEX
+  113         | TOKEN_BITWISE_AND • TOKEN_ID
+
+    TOKEN_ID  shift, and go to state 173
+
+    R_ARRAY_INDEX  go to state 174
+
+
+State 104
+
+   92 R_EXP: TOKEN_BITWISE_NOT • R_TERM
+
+    TOKEN_MINUS             shift, and go to state 175
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_TERM             go to state 176
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 105
+
+   99 R_OPERAND: TOKEN_LOGICAL_NOT • R_FACTOR
+
+    TOKEN_MINUS             shift, and go to state 175
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 177
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 178
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_FACTOR           go to state 179
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+
+
+State 106
+
+  109 R_FACTOR: TOKEN_FNUM •
+
+    $default  reduce using rule 109 (R_FACTOR)
+
+
+State 107
+
+  105 R_FACTOR: TOKEN_NUM •
+
+    $default  reduce using rule 105 (R_FACTOR)
+
+
+State 108
+
+  111 R_FACTOR: TOKEN_STR •
+
+    $default  reduce using rule 111 (R_FACTOR)
+
+
+State 109
+
+   55 R_FUNC_CALL: TOKEN_ID • TOKEN_LEFT_PARENTHESES R_EXP_LIST TOKEN_RIGHT_PARENTHESES
+  106 R_FACTOR: TOKEN_ID •
+  115 R_ARRAY_INDEX: TOKEN_ID • TOKEN_LEFT_BRACKET R_EXP TOKEN_RIGHT_BRACKET
+  122 R_POST_INCREMENT: TOKEN_ID • TOKEN_INCREMENT
+  124 R_POST_DECREMENT: TOKEN_ID • TOKEN_DECREMENT
+
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 126
+    TOKEN_LEFT_BRACKET      shift, and go to state 127
+    TOKEN_INCREMENT         shift, and go to state 129
+    TOKEN_DECREMENT         shift, and go to state 130
+
+    $default  reduce using rule 106 (R_FACTOR)
+
+
+State 110
+
+  110 R_FACTOR: TOKEN_CNUM •
+
+    $default  reduce using rule 110 (R_FACTOR)
+
+
+State 111
+
+  114 R_FACTOR: R_FUNC_CALL •
+
+    $default  reduce using rule 114 (R_FACTOR)
+
+
+State 112
+
+   42 R_RETURN: TOKEN_RETURN R_EXP • TOKEN_SEMI
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_SEMI                   shift, and go to state 183
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 113
+
+   95 R_EXP: R_TERM •
+   96 R_TERM: R_TERM • R_PRIORITY_OPERATOR R_OPERAND
+
+    TOKEN_OVER      shift, and go to state 201
+    TOKEN_PERCENT   shift, and go to state 202
+    TOKEN_ASTERISK  shift, and go to state 203
+
+    $default  reduce using rule 95 (R_EXP)
+
+    R_PRIORITY_OPERATOR  go to state 204
+
+
+State 114
+
+   97 R_TERM: R_OPERAND •
+
+    $default  reduce using rule 97 (R_TERM)
+
+
+State 115
+
+  101 R_OPERAND: R_FACTOR •
+
+    $default  reduce using rule 101 (R_OPERAND)
+
+
+State 116
+
+  103 R_FACTOR: R_ARRAY_INDEX •
+
+    $default  reduce using rule 103 (R_FACTOR)
+
+
+State 117
+
+  107 R_FACTOR: R_POINTER_CONTENT •
+
+    $default  reduce using rule 107 (R_FACTOR)
+
+
+State 118
+
+   98 R_OPERAND: R_INC_DEC •
+
+    $default  reduce using rule 98 (R_OPERAND)
+
+
+State 119
+
+  100 R_OPERAND: R_TYPE_CAST • R_FACTOR
+
+    TOKEN_MINUS             shift, and go to state 175
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 177
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 178
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_FACTOR           go to state 205
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+
+
+State 120
+
+   28 R_BREAK: TOKEN_BREAK TOKEN_SEMI •
+
+    $default  reduce using rule 28 (R_BREAK)
+
+
+State 121
+
+   27 R_CONTINUE: TOKEN_CONTINUE TOKEN_SEMI •
+
+    $default  reduce using rule 27 (R_CONTINUE)
+
+
+State 122
+
+   29 R_GOTO: TOKEN_GOTO TOKEN_ID • TOKEN_SEMI
+
+    TOKEN_SEMI  shift, and go to state 206
+
+
+State 123
+
+  121 R_PRE_INCREMENT: TOKEN_INCREMENT TOKEN_ID •
+
+    $default  reduce using rule 121 (R_PRE_INCREMENT)
+
+
+State 124
+
+  123 R_PRE_DECREMENT: TOKEN_DECREMENT TOKEN_ID •
+
+    $default  reduce using rule 123 (R_PRE_DECREMENT)
+
+
+State 125
+
+  116 R_POINTER_CONTENT: TOKEN_ASTERISK TOKEN_ID •
+
+    $default  reduce using rule 116 (R_POINTER_CONTENT)
+
+
+State 126
+
+   55 R_FUNC_CALL: TOKEN_ID TOKEN_LEFT_PARENTHESES • R_EXP_LIST TOKEN_RIGHT_PARENTHESES
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    $default  reduce using rule 56 (R_EXP_LIST)
+
+    R_FUNC_CALL        go to state 111
+    R_EXP_LIST         go to state 207
+    R_EXP              go to state 208
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 127
+
+  115 R_ARRAY_INDEX: TOKEN_ID TOKEN_LEFT_BRACKET • R_EXP TOKEN_RIGHT_BRACKET
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 209
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 128
+
+   51 R_LABEL: TOKEN_ID TOKEN_COLON •
+
+    $default  reduce using rule 51 (R_LABEL)
+
+
+State 129
+
+  122 R_POST_INCREMENT: TOKEN_ID TOKEN_INCREMENT •
+
+    $default  reduce using rule 122 (R_POST_INCREMENT)
+
+
+State 130
+
+  124 R_POST_DECREMENT: TOKEN_ID TOKEN_DECREMENT •
+
+    $default  reduce using rule 124 (R_POST_DECREMENT)
+
+
+State 131
+
+  143 R_COMPOUND_ASSIGN_OPERATOR: TOKEN_PLUS_ASSIGN •
+
+    $default  reduce using rule 143 (R_COMPOUND_ASSIGN_OPERATOR)
+
+
+State 132
+
+  144 R_COMPOUND_ASSIGN_OPERATOR: TOKEN_MINUS_ASSIGN •
+
+    $default  reduce using rule 144 (R_COMPOUND_ASSIGN_OPERATOR)
+
+
+State 133
+
+  146 R_COMPOUND_ASSIGN_OPERATOR: TOKEN_LEFT_SHIFT_ASSIGN •
+
+    $default  reduce using rule 146 (R_COMPOUND_ASSIGN_OPERATOR)
+
+
+State 134
+
+  147 R_COMPOUND_ASSIGN_OPERATOR: TOKEN_RIGHT_SHIFT_ASSIGN •
+
+    $default  reduce using rule 147 (R_COMPOUND_ASSIGN_OPERATOR)
+
+
+State 135
+
+  148 R_COMPOUND_ASSIGN_OPERATOR: TOKEN_BITWISE_AND_ASSIGN •
+
+    $default  reduce using rule 148 (R_COMPOUND_ASSIGN_OPERATOR)
+
+
+State 136
+
+  149 R_COMPOUND_ASSIGN_OPERATOR: TOKEN_BITWISE_OR_ASSIGN •
+
+    $default  reduce using rule 149 (R_COMPOUND_ASSIGN_OPERATOR)
+
+
+State 137
+
+  150 R_COMPOUND_ASSIGN_OPERATOR: TOKEN_BITWISE_XOR_ASSIGN •
+
+    $default  reduce using rule 150 (R_COMPOUND_ASSIGN_OPERATOR)
+
+
+State 138
+
+  151 R_COMPOUND_ASSIGN_OPERATOR: TOKEN_MULTIPLY_ASSIGN •
+
+    $default  reduce using rule 151 (R_COMPOUND_ASSIGN_OPERATOR)
+
+
+State 139
+
+  152 R_COMPOUND_ASSIGN_OPERATOR: TOKEN_DIVIDE_ASSIGN •
+
+    $default  reduce using rule 152 (R_COMPOUND_ASSIGN_OPERATOR)
+
+
+State 140
+
+  145 R_COMPOUND_ASSIGN_OPERATOR: TOKEN_MODULUS_ASSIGN •
+
+    $default  reduce using rule 145 (R_COMPOUND_ASSIGN_OPERATOR)
+
+
+State 141
+
+   78 R_COMPOUND_VAR_ASSIGN: TOKEN_ID R_COMPOUND_ASSIGN_OPERATOR • R_EXP
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 210
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 142
+
+   25 R_COMPOUND_STATEMENT: TOKEN_LEFT_BRACE R_LOCAL_STATEMENT_LIST TOKEN_RIGHT_BRACE •
+
+    $default  reduce using rule 25 (R_COMPOUND_STATEMENT)
+
+
+State 143
+
+    8 R_LOCAL_STATEMENT_LIST: R_LOCAL_STATEMENT_LIST R_LOCAL_STATEMENT •
+
+    $default  reduce using rule 8 (R_LOCAL_STATEMENT_LIST)
+
+
+State 144
+
+   23 R_LOCAL_STATEMENT: R_FUNC_CALL TOKEN_SEMI •
+
+    $default  reduce using rule 23 (R_LOCAL_STATEMENT)
+
+
+State 145
+
+   75 R_VAR_ASSIGNMENT: R_COMPOUND_VAR_ASSIGN TOKEN_SEMI •
+
+    $default  reduce using rule 75 (R_VAR_ASSIGNMENT)
+
+
+State 146
+
+   74 R_VAR_ASSIGNMENT: R_SIMPLE_VAR_ASSIGN TOKEN_SEMI •
+
+    $default  reduce using rule 74 (R_VAR_ASSIGNMENT)
+
+
+State 147
+
+   68 R_ARR_DECLARATION: R_VAR_PREAMBLE TOKEN_ID • R_ARR_SIZE TOKEN_SEMI
+   73 R_ID_LIST: TOKEN_ID •
+   79 R_SIMPLE_VAR_ASSIGN: TOKEN_ID • TOKEN_ASSIGN R_EXP
+
+    TOKEN_ASSIGN        shift, and go to state 85
+    TOKEN_LEFT_BRACKET  shift, and go to state 87
+
+    $default  reduce using rule 73 (R_ID_LIST)
+
+    R_ARR_SIZE  go to state 88
+
+
+State 148
+
+   76 R_VAR_ASSIGNMENT: R_ARRAY_INDEX TOKEN_ASSIGN • R_EXP TOKEN_SEMI
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 211
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 149
+
+   77 R_VAR_ASSIGNMENT: R_POINTER_CONTENT TOKEN_ASSIGN • R_EXP TOKEN_SEMI
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 212
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 150
+
+   24 R_LOCAL_STATEMENT: R_INC_DEC TOKEN_SEMI •
+
+    $default  reduce using rule 24 (R_LOCAL_STATEMENT)
+
+
+State 151
+
+   79 R_SIMPLE_VAR_ASSIGN: TOKEN_ID TOKEN_ASSIGN R_EXP •
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    $default  reduce using rule 79 (R_SIMPLE_VAR_ASSIGN)
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 152
+
+   52 R_FUNC_SIGNATURE: R_VAR_PREAMBLE TOKEN_ID TOKEN_LEFT_PARENTHESES R_ARG_LIST • TOKEN_RIGHT_PARENTHESES
+   60 R_ARG_LIST: R_ARG_LIST • TOKEN_COMMA R_ARG
+
+    TOKEN_RIGHT_PARENTHESES  shift, and go to state 213
+    TOKEN_COMMA              shift, and go to state 214
+
+
+State 153
+
+   61 R_ARG_LIST: R_ARG •
+
+    $default  reduce using rule 61 (R_ARG_LIST)
+
+
+State 154
+
+   65 R_ARG: R_TYPE_ALL • TOKEN_ID
+
+    TOKEN_ID  shift, and go to state 215
+
+
+State 155
+
+   62 R_ARG: R_MOD_QUALIFIER • R_SIGN_QUALIFIER R_TYPE_ALL TOKEN_ID
+   64      | R_MOD_QUALIFIER • R_TYPE_ALL TOKEN_ID
+
+    TOKEN_INT       shift, and go to state 1
+    TOKEN_FLOAT     shift, and go to state 2
+    TOKEN_DOUBLE    shift, and go to state 3
+    TOKEN_CHAR      shift, and go to state 4
+    TOKEN_VOID      shift, and go to state 5
+    TOKEN_LONG      shift, and go to state 7
+    TOKEN_SHORT     shift, and go to state 8
+    TOKEN_SIGNED    shift, and go to state 10
+    TOKEN_UNSIGNED  shift, and go to state 11
+
+    R_TYPE_ALL        go to state 216
+    R_TYPE_PTR        go to state 23
+    R_TYPE            go to state 24
+    R_SIGN_QUALIFIER  go to state 217
+
+
+State 156
+
+   63 R_ARG: R_SIGN_QUALIFIER • R_TYPE_ALL TOKEN_ID
+
+    TOKEN_INT     shift, and go to state 1
+    TOKEN_FLOAT   shift, and go to state 2
+    TOKEN_DOUBLE  shift, and go to state 3
+    TOKEN_CHAR    shift, and go to state 4
+    TOKEN_VOID    shift, and go to state 5
+    TOKEN_LONG    shift, and go to state 7
+    TOKEN_SHORT   shift, and go to state 8
+
+    R_TYPE_ALL  go to state 218
+    R_TYPE_PTR  go to state 23
+    R_TYPE      go to state 24
+
+
+State 157
+
+   69 R_ARR_SIZE: TOKEN_LEFT_BRACKET TOKEN_NUM • TOKEN_RIGHT_BRACKET
+
+    TOKEN_RIGHT_BRACKET  shift, and go to state 219
+
+
+State 158
+
+   68 R_ARR_DECLARATION: R_VAR_PREAMBLE TOKEN_ID R_ARR_SIZE TOKEN_SEMI •
+
+    $default  reduce using rule 68 (R_ARR_DECLARATION)
+
+
+State 159
+
+   70 R_ID_LIST: R_ID_LIST TOKEN_COMMA TOKEN_ID •
+   79 R_SIMPLE_VAR_ASSIGN: TOKEN_ID • TOKEN_ASSIGN R_EXP
+
+    TOKEN_ASSIGN  shift, and go to state 85
+
+    $default  reduce using rule 70 (R_ID_LIST)
+
+
+State 160
+
+   71 R_ID_LIST: R_ID_LIST TOKEN_COMMA R_SIMPLE_VAR_ASSIGN •
+
+    $default  reduce using rule 71 (R_ID_LIST)
+
+
+State 161
+
+   80 R_VAR_PREAMBLE: R_VISIBILITY_QUALIFIER R_MOD_QUALIFIER R_SIGN_QUALIFIER R_TYPE_ALL •
+
+    $default  reduce using rule 80 (R_VAR_PREAMBLE)
+
+
+State 162
+
+   39 R_IF_STATEMENT: TOKEN_IF TOKEN_LEFT_PARENTHESES R_EXP • TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+   40               | TOKEN_IF TOKEN_LEFT_PARENTHESES R_EXP • TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT TOKEN_ELSE R_LOCAL_STATEMENT
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_RIGHT_PARENTHESES      shift, and go to state 220
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 163
+
+   45 R_DO_WHILE_LOOP: TOKEN_DO R_LOCAL_STATEMENT TOKEN_WHILE • TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_SEMI
+
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 221
+
+
+State 164
+
+   43 R_WHILE_LOOP: TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP • TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+   44             | TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP • TOKEN_RIGHT_PARENTHESES TOKEN_SEMI
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_RIGHT_PARENTHESES      shift, and go to state 222
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 165
+
+   47 R_FOR_INIT_FIELD: TOKEN_ID • TOKEN_ASSIGN R_EXP
+
+    TOKEN_ASSIGN  shift, and go to state 223
+
+
+State 166
+
+   46 R_FOR_LOOP: TOKEN_FOR TOKEN_LEFT_PARENTHESES R_FOR_INIT_FIELD • TOKEN_SEMI R_EXP TOKEN_SEMI R_FOR_ASSIGNMENT_FIELD TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+
+    TOKEN_SEMI  shift, and go to state 224
+
+
+State 167
+
+   30 R_SWITCH: TOKEN_SWITCH TOKEN_LEFT_PARENTHESES R_EXP • TOKEN_RIGHT_PARENTHESES TOKEN_LEFT_BRACE R_SWITCH_BODY TOKEN_RIGHT_BRACE
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_RIGHT_PARENTHESES      shift, and go to state 225
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 168
+
+  108 R_FACTOR: TOKEN_MINUS TOKEN_FNUM •
+  109         | TOKEN_FNUM •
+
+    TOKEN_PLUS                   reduce using rule 108 (R_FACTOR)
+    TOKEN_PLUS                   [reduce using rule 109 (R_FACTOR)]
+    TOKEN_MINUS                  reduce using rule 108 (R_FACTOR)
+    TOKEN_MINUS                  [reduce using rule 109 (R_FACTOR)]
+    TOKEN_OVER                   reduce using rule 108 (R_FACTOR)
+    TOKEN_OVER                   [reduce using rule 109 (R_FACTOR)]
+    TOKEN_PERCENT                reduce using rule 108 (R_FACTOR)
+    TOKEN_PERCENT                [reduce using rule 109 (R_FACTOR)]
+    TOKEN_RIGHT_PARENTHESES      reduce using rule 108 (R_FACTOR)
+    TOKEN_RIGHT_PARENTHESES      [reduce using rule 109 (R_FACTOR)]
+    TOKEN_RIGHT_BRACKET          reduce using rule 108 (R_FACTOR)
+    TOKEN_RIGHT_BRACKET          [reduce using rule 109 (R_FACTOR)]
+    TOKEN_TERNARY                reduce using rule 108 (R_FACTOR)
+    TOKEN_TERNARY                [reduce using rule 109 (R_FACTOR)]
+    TOKEN_SEMI                   reduce using rule 108 (R_FACTOR)
+    TOKEN_SEMI                   [reduce using rule 109 (R_FACTOR)]
+    TOKEN_COLON                  reduce using rule 108 (R_FACTOR)
+    TOKEN_COLON                  [reduce using rule 109 (R_FACTOR)]
+    TOKEN_COMMA                  reduce using rule 108 (R_FACTOR)
+    TOKEN_COMMA                  [reduce using rule 109 (R_FACTOR)]
+    TOKEN_BITWISE_AND            reduce using rule 108 (R_FACTOR)
+    TOKEN_BITWISE_AND            [reduce using rule 109 (R_FACTOR)]
+    TOKEN_BITWISE_OR             reduce using rule 108 (R_FACTOR)
+    TOKEN_BITWISE_OR             [reduce using rule 109 (R_FACTOR)]
+    TOKEN_LOGICAL_AND            reduce using rule 108 (R_FACTOR)
+    TOKEN_LOGICAL_AND            [reduce using rule 109 (R_FACTOR)]
+    TOKEN_BITWISE_XOR            reduce using rule 108 (R_FACTOR)
+    TOKEN_BITWISE_XOR            [reduce using rule 109 (R_FACTOR)]
+    TOKEN_LOGICAL_OR             reduce using rule 108 (R_FACTOR)
+    TOKEN_LOGICAL_OR             [reduce using rule 109 (R_FACTOR)]
+    TOKEN_EQUAL                  reduce using rule 108 (R_FACTOR)
+    TOKEN_EQUAL                  [reduce using rule 109 (R_FACTOR)]
+    TOKEN_NOT_EQUAL              reduce using rule 108 (R_FACTOR)
+    TOKEN_NOT_EQUAL              [reduce using rule 109 (R_FACTOR)]
+    TOKEN_LESS_THAN              reduce using rule 108 (R_FACTOR)
+    TOKEN_LESS_THAN              [reduce using rule 109 (R_FACTOR)]
+    TOKEN_GREATER_THAN           reduce using rule 108 (R_FACTOR)
+    TOKEN_GREATER_THAN           [reduce using rule 109 (R_FACTOR)]
+    TOKEN_LESS_THAN_OR_EQUAL     reduce using rule 108 (R_FACTOR)
+    TOKEN_LESS_THAN_OR_EQUAL     [reduce using rule 109 (R_FACTOR)]
+    TOKEN_GREATER_THAN_OR_EQUAL  reduce using rule 108 (R_FACTOR)
+    TOKEN_GREATER_THAN_OR_EQUAL  [reduce using rule 109 (R_FACTOR)]
+    TOKEN_RIGHT_SHIFT            reduce using rule 108 (R_FACTOR)
+    TOKEN_RIGHT_SHIFT            [reduce using rule 109 (R_FACTOR)]
+    TOKEN_LEFT_SHIFT             reduce using rule 108 (R_FACTOR)
+    TOKEN_LEFT_SHIFT             [reduce using rule 109 (R_FACTOR)]
+    TOKEN_ASTERISK               reduce using rule 108 (R_FACTOR)
+    TOKEN_ASTERISK               [reduce using rule 109 (R_FACTOR)]
+    $default                     reduce using rule 108 (R_FACTOR)
+
+
+State 169
+
+  104 R_FACTOR: TOKEN_MINUS TOKEN_NUM •
+  105         | TOKEN_NUM •
+
+    TOKEN_PLUS                   reduce using rule 104 (R_FACTOR)
+    TOKEN_PLUS                   [reduce using rule 105 (R_FACTOR)]
+    TOKEN_MINUS                  reduce using rule 104 (R_FACTOR)
+    TOKEN_MINUS                  [reduce using rule 105 (R_FACTOR)]
+    TOKEN_OVER                   reduce using rule 104 (R_FACTOR)
+    TOKEN_OVER                   [reduce using rule 105 (R_FACTOR)]
+    TOKEN_PERCENT                reduce using rule 104 (R_FACTOR)
+    TOKEN_PERCENT                [reduce using rule 105 (R_FACTOR)]
+    TOKEN_RIGHT_PARENTHESES      reduce using rule 104 (R_FACTOR)
+    TOKEN_RIGHT_PARENTHESES      [reduce using rule 105 (R_FACTOR)]
+    TOKEN_RIGHT_BRACKET          reduce using rule 104 (R_FACTOR)
+    TOKEN_RIGHT_BRACKET          [reduce using rule 105 (R_FACTOR)]
+    TOKEN_TERNARY                reduce using rule 104 (R_FACTOR)
+    TOKEN_TERNARY                [reduce using rule 105 (R_FACTOR)]
+    TOKEN_SEMI                   reduce using rule 104 (R_FACTOR)
+    TOKEN_SEMI                   [reduce using rule 105 (R_FACTOR)]
+    TOKEN_COLON                  reduce using rule 104 (R_FACTOR)
+    TOKEN_COLON                  [reduce using rule 105 (R_FACTOR)]
+    TOKEN_COMMA                  reduce using rule 104 (R_FACTOR)
+    TOKEN_COMMA                  [reduce using rule 105 (R_FACTOR)]
+    TOKEN_BITWISE_AND            reduce using rule 104 (R_FACTOR)
+    TOKEN_BITWISE_AND            [reduce using rule 105 (R_FACTOR)]
+    TOKEN_BITWISE_OR             reduce using rule 104 (R_FACTOR)
+    TOKEN_BITWISE_OR             [reduce using rule 105 (R_FACTOR)]
+    TOKEN_LOGICAL_AND            reduce using rule 104 (R_FACTOR)
+    TOKEN_LOGICAL_AND            [reduce using rule 105 (R_FACTOR)]
+    TOKEN_BITWISE_XOR            reduce using rule 104 (R_FACTOR)
+    TOKEN_BITWISE_XOR            [reduce using rule 105 (R_FACTOR)]
+    TOKEN_LOGICAL_OR             reduce using rule 104 (R_FACTOR)
+    TOKEN_LOGICAL_OR             [reduce using rule 105 (R_FACTOR)]
+    TOKEN_EQUAL                  reduce using rule 104 (R_FACTOR)
+    TOKEN_EQUAL                  [reduce using rule 105 (R_FACTOR)]
+    TOKEN_NOT_EQUAL              reduce using rule 104 (R_FACTOR)
+    TOKEN_NOT_EQUAL              [reduce using rule 105 (R_FACTOR)]
+    TOKEN_LESS_THAN              reduce using rule 104 (R_FACTOR)
+    TOKEN_LESS_THAN              [reduce using rule 105 (R_FACTOR)]
+    TOKEN_GREATER_THAN           reduce using rule 104 (R_FACTOR)
+    TOKEN_GREATER_THAN           [reduce using rule 105 (R_FACTOR)]
+    TOKEN_LESS_THAN_OR_EQUAL     reduce using rule 104 (R_FACTOR)
+    TOKEN_LESS_THAN_OR_EQUAL     [reduce using rule 105 (R_FACTOR)]
+    TOKEN_GREATER_THAN_OR_EQUAL  reduce using rule 104 (R_FACTOR)
+    TOKEN_GREATER_THAN_OR_EQUAL  [reduce using rule 105 (R_FACTOR)]
+    TOKEN_RIGHT_SHIFT            reduce using rule 104 (R_FACTOR)
+    TOKEN_RIGHT_SHIFT            [reduce using rule 105 (R_FACTOR)]
+    TOKEN_LEFT_SHIFT             reduce using rule 104 (R_FACTOR)
+    TOKEN_LEFT_SHIFT             [reduce using rule 105 (R_FACTOR)]
+    TOKEN_ASTERISK               reduce using rule 104 (R_FACTOR)
+    TOKEN_ASTERISK               [reduce using rule 105 (R_FACTOR)]
+    $default                     reduce using rule 104 (R_FACTOR)
+
+
+State 170
+
+   88 R_EXP: TOKEN_MINUS R_EXP •
+   89      | R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    TOKEN_TERNARY                [reduce using rule 88 (R_EXP)]
+    TOKEN_BITWISE_AND            [reduce using rule 88 (R_EXP)]
+    TOKEN_BITWISE_OR             [reduce using rule 88 (R_EXP)]
+    TOKEN_LOGICAL_AND            [reduce using rule 88 (R_EXP)]
+    TOKEN_BITWISE_XOR            [reduce using rule 88 (R_EXP)]
+    TOKEN_LOGICAL_OR             [reduce using rule 88 (R_EXP)]
+    TOKEN_EQUAL                  [reduce using rule 88 (R_EXP)]
+    TOKEN_NOT_EQUAL              [reduce using rule 88 (R_EXP)]
+    TOKEN_LESS_THAN              [reduce using rule 88 (R_EXP)]
+    TOKEN_GREATER_THAN           [reduce using rule 88 (R_EXP)]
+    TOKEN_LESS_THAN_OR_EQUAL     [reduce using rule 88 (R_EXP)]
+    TOKEN_GREATER_THAN_OR_EQUAL  [reduce using rule 88 (R_EXP)]
+    TOKEN_RIGHT_SHIFT            [reduce using rule 88 (R_EXP)]
+    TOKEN_LEFT_SHIFT             [reduce using rule 88 (R_EXP)]
+    $default                     reduce using rule 88 (R_EXP)
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 171
+
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+  102 R_FACTOR: TOKEN_LEFT_PARENTHESES R_EXP • TOKEN_RIGHT_PARENTHESES
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_RIGHT_PARENTHESES      shift, and go to state 226
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 172
+
+  153 R_TYPE_CAST: TOKEN_LEFT_PARENTHESES R_TYPE_ALL • TOKEN_RIGHT_PARENTHESES
+
+    TOKEN_RIGHT_PARENTHESES  shift, and go to state 227
+
+
+State 173
+
+  113 R_FACTOR: TOKEN_BITWISE_AND TOKEN_ID •
+  115 R_ARRAY_INDEX: TOKEN_ID • TOKEN_LEFT_BRACKET R_EXP TOKEN_RIGHT_BRACKET
+
+    TOKEN_LEFT_BRACKET  shift, and go to state 127
+
+    $default  reduce using rule 113 (R_FACTOR)
+
+
+State 174
+
+  112 R_FACTOR: TOKEN_BITWISE_AND R_ARRAY_INDEX •
+
+    $default  reduce using rule 112 (R_FACTOR)
+
+
+State 175
+
+  104 R_FACTOR: TOKEN_MINUS • TOKEN_NUM
+  108         | TOKEN_MINUS • TOKEN_FNUM
+
+    TOKEN_FNUM  shift, and go to state 228
+    TOKEN_NUM   shift, and go to state 229
+
+
+State 176
+
+   92 R_EXP: TOKEN_BITWISE_NOT R_TERM •
+   96 R_TERM: R_TERM • R_PRIORITY_OPERATOR R_OPERAND
+
+    TOKEN_OVER      shift, and go to state 201
+    TOKEN_PERCENT   shift, and go to state 202
+    TOKEN_ASTERISK  shift, and go to state 203
+
+    $default  reduce using rule 92 (R_EXP)
+
+    R_PRIORITY_OPERATOR  go to state 204
+
+
+State 177
+
+  102 R_FACTOR: TOKEN_LEFT_PARENTHESES • R_EXP TOKEN_RIGHT_PARENTHESES
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 171
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 178
+
+   55 R_FUNC_CALL: TOKEN_ID • TOKEN_LEFT_PARENTHESES R_EXP_LIST TOKEN_RIGHT_PARENTHESES
+  106 R_FACTOR: TOKEN_ID •
+  115 R_ARRAY_INDEX: TOKEN_ID • TOKEN_LEFT_BRACKET R_EXP TOKEN_RIGHT_BRACKET
+
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 126
+    TOKEN_LEFT_BRACKET      shift, and go to state 127
+
+    $default  reduce using rule 106 (R_FACTOR)
+
+
+State 179
+
+   99 R_OPERAND: TOKEN_LOGICAL_NOT R_FACTOR •
+
+    $default  reduce using rule 99 (R_OPERAND)
+
+
+State 180
+
+  125 R_ARITHMETIC_OPERATOR: TOKEN_PLUS •
+
+    $default  reduce using rule 125 (R_ARITHMETIC_OPERATOR)
+
+
+State 181
+
+  126 R_ARITHMETIC_OPERATOR: TOKEN_MINUS •
+
+    $default  reduce using rule 126 (R_ARITHMETIC_OPERATOR)
+
+
+State 182
+
+   94 R_EXP: R_EXP TOKEN_TERNARY • R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 230
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 183
+
+   42 R_RETURN: TOKEN_RETURN R_EXP TOKEN_SEMI •
+
+    $default  reduce using rule 42 (R_RETURN)
+
+
+State 184
+
+  140 R_BITWISE_OPERATOR: TOKEN_BITWISE_AND •
+
+    $default  reduce using rule 140 (R_BITWISE_OPERATOR)
+
+
+State 185
+
+  141 R_BITWISE_OPERATOR: TOKEN_BITWISE_OR •
+
+    $default  reduce using rule 141 (R_BITWISE_OPERATOR)
+
+
+State 186
+
+  138 R_LOGIC_OPERATOR: TOKEN_LOGICAL_AND •
+
+    $default  reduce using rule 138 (R_LOGIC_OPERATOR)
+
+
+State 187
+
+  142 R_BITWISE_OPERATOR: TOKEN_BITWISE_XOR •
+
+    $default  reduce using rule 142 (R_BITWISE_OPERATOR)
+
+
+State 188
+
+  139 R_LOGIC_OPERATOR: TOKEN_LOGICAL_OR •
+
+    $default  reduce using rule 139 (R_LOGIC_OPERATOR)
+
+
+State 189
+
+  136 R_CONDITION_OPERATOR: TOKEN_EQUAL •
+
+    $default  reduce using rule 136 (R_CONDITION_OPERATOR)
+
+
+State 190
+
+  137 R_CONDITION_OPERATOR: TOKEN_NOT_EQUAL •
+
+    $default  reduce using rule 137 (R_CONDITION_OPERATOR)
+
+
+State 191
+
+  135 R_CONDITION_OPERATOR: TOKEN_LESS_THAN •
+
+    $default  reduce using rule 135 (R_CONDITION_OPERATOR)
+
+
+State 192
+
+  132 R_CONDITION_OPERATOR: TOKEN_GREATER_THAN •
+
+    $default  reduce using rule 132 (R_CONDITION_OPERATOR)
+
+
+State 193
+
+  133 R_CONDITION_OPERATOR: TOKEN_LESS_THAN_OR_EQUAL •
+
+    $default  reduce using rule 133 (R_CONDITION_OPERATOR)
+
+
+State 194
+
+  134 R_CONDITION_OPERATOR: TOKEN_GREATER_THAN_OR_EQUAL •
+
+    $default  reduce using rule 134 (R_CONDITION_OPERATOR)
+
+
+State 195
+
+  127 R_ARITHMETIC_OPERATOR: TOKEN_RIGHT_SHIFT •
+
+    $default  reduce using rule 127 (R_ARITHMETIC_OPERATOR)
+
+
+State 196
+
+  128 R_ARITHMETIC_OPERATOR: TOKEN_LEFT_SHIFT •
+
+    $default  reduce using rule 128 (R_ARITHMETIC_OPERATOR)
+
+
+State 197
+
+   89 R_EXP: R_EXP R_ARITHMETIC_OPERATOR • R_TERM
+
+    TOKEN_MINUS             shift, and go to state 175
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_TERM             go to state 231
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 198
+
+   90 R_EXP: R_EXP R_CONDITION_OPERATOR • R_TERM
+
+    TOKEN_MINUS             shift, and go to state 175
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_TERM             go to state 232
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 199
+
+   93 R_EXP: R_EXP R_LOGIC_OPERATOR • R_TERM
+
+    TOKEN_MINUS             shift, and go to state 175
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_TERM             go to state 233
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 200
+
+   91 R_EXP: R_EXP R_BITWISE_OPERATOR • R_TERM
+
+    TOKEN_MINUS             shift, and go to state 175
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_TERM             go to state 234
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 201
+
+  130 R_PRIORITY_OPERATOR: TOKEN_OVER •
+
+    $default  reduce using rule 130 (R_PRIORITY_OPERATOR)
+
+
+State 202
+
+  131 R_PRIORITY_OPERATOR: TOKEN_PERCENT •
+
+    $default  reduce using rule 131 (R_PRIORITY_OPERATOR)
+
+
+State 203
+
+  129 R_PRIORITY_OPERATOR: TOKEN_ASTERISK •
+
+    $default  reduce using rule 129 (R_PRIORITY_OPERATOR)
+
+
+State 204
+
+   96 R_TERM: R_TERM R_PRIORITY_OPERATOR • R_OPERAND
+
+    TOKEN_MINUS             shift, and go to state 175
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_OPERAND          go to state 235
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 205
+
+  100 R_OPERAND: R_TYPE_CAST R_FACTOR •
+
+    $default  reduce using rule 100 (R_OPERAND)
+
+
+State 206
+
+   29 R_GOTO: TOKEN_GOTO TOKEN_ID TOKEN_SEMI •
+
+    $default  reduce using rule 29 (R_GOTO)
+
+
+State 207
+
+   55 R_FUNC_CALL: TOKEN_ID TOKEN_LEFT_PARENTHESES R_EXP_LIST • TOKEN_RIGHT_PARENTHESES
+   57 R_EXP_LIST: R_EXP_LIST • TOKEN_COMMA R_EXP
+
+    TOKEN_RIGHT_PARENTHESES  shift, and go to state 236
+    TOKEN_COMMA              shift, and go to state 237
+
+
+State 208
+
+   58 R_EXP_LIST: R_EXP •
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    $default  reduce using rule 58 (R_EXP_LIST)
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 209
+
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+  115 R_ARRAY_INDEX: TOKEN_ID TOKEN_LEFT_BRACKET R_EXP • TOKEN_RIGHT_BRACKET
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_RIGHT_BRACKET          shift, and go to state 238
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 210
+
+   78 R_COMPOUND_VAR_ASSIGN: TOKEN_ID R_COMPOUND_ASSIGN_OPERATOR R_EXP •
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    $default  reduce using rule 78 (R_COMPOUND_VAR_ASSIGN)
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 211
+
+   76 R_VAR_ASSIGNMENT: R_ARRAY_INDEX TOKEN_ASSIGN R_EXP • TOKEN_SEMI
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_SEMI                   shift, and go to state 239
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 212
+
+   77 R_VAR_ASSIGNMENT: R_POINTER_CONTENT TOKEN_ASSIGN R_EXP • TOKEN_SEMI
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_SEMI                   shift, and go to state 240
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 213
+
+   52 R_FUNC_SIGNATURE: R_VAR_PREAMBLE TOKEN_ID TOKEN_LEFT_PARENTHESES R_ARG_LIST TOKEN_RIGHT_PARENTHESES •
+
+    $default  reduce using rule 52 (R_FUNC_SIGNATURE)
+
+
+State 214
+
+   60 R_ARG_LIST: R_ARG_LIST TOKEN_COMMA • R_ARG
+
+    TOKEN_INT       shift, and go to state 1
+    TOKEN_FLOAT     shift, and go to state 2
+    TOKEN_DOUBLE    shift, and go to state 3
+    TOKEN_CHAR      shift, and go to state 4
+    TOKEN_VOID      shift, and go to state 5
+    TOKEN_LONG      shift, and go to state 7
+    TOKEN_SHORT     shift, and go to state 8
+    TOKEN_SIGNED    shift, and go to state 10
+    TOKEN_UNSIGNED  shift, and go to state 11
+    TOKEN_VOLATILE  shift, and go to state 12
+    TOKEN_CONSTANT  shift, and go to state 13
+
+    R_ARG             go to state 241
+    R_TYPE_ALL        go to state 154
+    R_TYPE_PTR        go to state 23
+    R_TYPE            go to state 24
+    R_MOD_QUALIFIER   go to state 155
+    R_SIGN_QUALIFIER  go to state 156
+
+
+State 215
+
+   65 R_ARG: R_TYPE_ALL TOKEN_ID •
+
+    $default  reduce using rule 65 (R_ARG)
+
+
+State 216
+
+   64 R_ARG: R_MOD_QUALIFIER R_TYPE_ALL • TOKEN_ID
+
+    TOKEN_ID  shift, and go to state 242
+
+
+State 217
+
+   62 R_ARG: R_MOD_QUALIFIER R_SIGN_QUALIFIER • R_TYPE_ALL TOKEN_ID
+
+    TOKEN_INT     shift, and go to state 1
+    TOKEN_FLOAT   shift, and go to state 2
+    TOKEN_DOUBLE  shift, and go to state 3
+    TOKEN_CHAR    shift, and go to state 4
+    TOKEN_VOID    shift, and go to state 5
+    TOKEN_LONG    shift, and go to state 7
+    TOKEN_SHORT   shift, and go to state 8
+
+    R_TYPE_ALL  go to state 243
+    R_TYPE_PTR  go to state 23
+    R_TYPE      go to state 24
+
+
+State 218
+
+   63 R_ARG: R_SIGN_QUALIFIER R_TYPE_ALL • TOKEN_ID
+
+    TOKEN_ID  shift, and go to state 244
+
+
+State 219
+
+   69 R_ARR_SIZE: TOKEN_LEFT_BRACKET TOKEN_NUM TOKEN_RIGHT_BRACKET •
+
+    $default  reduce using rule 69 (R_ARR_SIZE)
+
+
+State 220
+
+   39 R_IF_STATEMENT: TOKEN_IF TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES • R_LOCAL_STATEMENT
+   40               | TOKEN_IF TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES • R_LOCAL_STATEMENT TOKEN_ELSE R_LOCAL_STATEMENT
+
+    TOKEN_IF          shift, and go to state 45
+    TOKEN_DO          shift, and go to state 46
+    TOKEN_WHILE       shift, and go to state 47
+    TOKEN_FOR         shift, and go to state 48
+    TOKEN_SWITCH      shift, and go to state 49
+    TOKEN_RETURN      shift, and go to state 50
+    TOKEN_BREAK       shift, and go to state 51
+    TOKEN_INT         shift, and go to state 1
+    TOKEN_FLOAT       shift, and go to state 2
+    TOKEN_DOUBLE      shift, and go to state 3
+    TOKEN_CHAR        shift, and go to state 4
+    TOKEN_VOID        shift, and go to state 5
+    TOKEN_CONTINUE    shift, and go to state 52
+    TOKEN_EXTERN      shift, and go to state 6
+    TOKEN_GOTO        shift, and go to state 53
+    TOKEN_LONG        shift, and go to state 7
+    TOKEN_SHORT       shift, and go to state 8
+    TOKEN_STATIC      shift, and go to state 9
+    TOKEN_SIGNED      shift, and go to state 10
+    TOKEN_UNSIGNED    shift, and go to state 11
+    TOKEN_VOLATILE    shift, and go to state 12
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_INCREMENT   shift, and go to state 55
+    TOKEN_DECREMENT   shift, and go to state 56
+    TOKEN_CONSTANT    shift, and go to state 13
+    TOKEN_ASTERISK    shift, and go to state 57
+    TOKEN_ID          shift, and go to state 58
+
+    R_LOCAL_STATEMENT       go to state 245
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 221
+
+   45 R_DO_WHILE_LOOP: TOKEN_DO R_LOCAL_STATEMENT TOKEN_WHILE TOKEN_LEFT_PARENTHESES • R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_SEMI
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 246
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 222
+
+   43 R_WHILE_LOOP: TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES • R_LOCAL_STATEMENT
+   44             | TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES • TOKEN_SEMI
+
+    TOKEN_IF          shift, and go to state 45
+    TOKEN_DO          shift, and go to state 46
+    TOKEN_WHILE       shift, and go to state 47
+    TOKEN_FOR         shift, and go to state 48
+    TOKEN_SWITCH      shift, and go to state 49
+    TOKEN_RETURN      shift, and go to state 50
+    TOKEN_BREAK       shift, and go to state 51
+    TOKEN_INT         shift, and go to state 1
+    TOKEN_FLOAT       shift, and go to state 2
+    TOKEN_DOUBLE      shift, and go to state 3
+    TOKEN_CHAR        shift, and go to state 4
+    TOKEN_VOID        shift, and go to state 5
+    TOKEN_CONTINUE    shift, and go to state 52
+    TOKEN_EXTERN      shift, and go to state 6
+    TOKEN_GOTO        shift, and go to state 53
+    TOKEN_LONG        shift, and go to state 7
+    TOKEN_SHORT       shift, and go to state 8
+    TOKEN_STATIC      shift, and go to state 9
+    TOKEN_SIGNED      shift, and go to state 10
+    TOKEN_UNSIGNED    shift, and go to state 11
+    TOKEN_VOLATILE    shift, and go to state 12
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_SEMI        shift, and go to state 247
+    TOKEN_INCREMENT   shift, and go to state 55
+    TOKEN_DECREMENT   shift, and go to state 56
+    TOKEN_CONSTANT    shift, and go to state 13
+    TOKEN_ASTERISK    shift, and go to state 57
+    TOKEN_ID          shift, and go to state 58
+
+    R_LOCAL_STATEMENT       go to state 248
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 223
+
+   47 R_FOR_INIT_FIELD: TOKEN_ID TOKEN_ASSIGN • R_EXP
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 249
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 224
+
+   46 R_FOR_LOOP: TOKEN_FOR TOKEN_LEFT_PARENTHESES R_FOR_INIT_FIELD TOKEN_SEMI • R_EXP TOKEN_SEMI R_FOR_ASSIGNMENT_FIELD TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 250
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 225
+
+   30 R_SWITCH: TOKEN_SWITCH TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES • TOKEN_LEFT_BRACE R_SWITCH_BODY TOKEN_RIGHT_BRACE
+
+    TOKEN_LEFT_BRACE  shift, and go to state 251
+
+
+State 226
+
+  102 R_FACTOR: TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES •
+
+    $default  reduce using rule 102 (R_FACTOR)
+
+
+State 227
+
+  153 R_TYPE_CAST: TOKEN_LEFT_PARENTHESES R_TYPE_ALL TOKEN_RIGHT_PARENTHESES •
+
+    $default  reduce using rule 153 (R_TYPE_CAST)
+
+
+State 228
+
+  108 R_FACTOR: TOKEN_MINUS TOKEN_FNUM •
+
+    $default  reduce using rule 108 (R_FACTOR)
+
+
+State 229
+
+  104 R_FACTOR: TOKEN_MINUS TOKEN_NUM •
+
+    $default  reduce using rule 104 (R_FACTOR)
+
+
+State 230
+
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+   94      | R_EXP TOKEN_TERNARY R_EXP • TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_COLON                  shift, and go to state 252
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 231
+
+   89 R_EXP: R_EXP R_ARITHMETIC_OPERATOR R_TERM •
+   96 R_TERM: R_TERM • R_PRIORITY_OPERATOR R_OPERAND
+
+    TOKEN_OVER      shift, and go to state 201
+    TOKEN_PERCENT   shift, and go to state 202
+    TOKEN_ASTERISK  shift, and go to state 203
+
+    $default  reduce using rule 89 (R_EXP)
+
+    R_PRIORITY_OPERATOR  go to state 204
+
+
+State 232
+
+   90 R_EXP: R_EXP R_CONDITION_OPERATOR R_TERM •
+   96 R_TERM: R_TERM • R_PRIORITY_OPERATOR R_OPERAND
+
+    TOKEN_OVER      shift, and go to state 201
+    TOKEN_PERCENT   shift, and go to state 202
+    TOKEN_ASTERISK  shift, and go to state 203
+
+    $default  reduce using rule 90 (R_EXP)
+
+    R_PRIORITY_OPERATOR  go to state 204
+
+
+State 233
+
+   93 R_EXP: R_EXP R_LOGIC_OPERATOR R_TERM •
+   96 R_TERM: R_TERM • R_PRIORITY_OPERATOR R_OPERAND
+
+    TOKEN_OVER      shift, and go to state 201
+    TOKEN_PERCENT   shift, and go to state 202
+    TOKEN_ASTERISK  shift, and go to state 203
+
+    $default  reduce using rule 93 (R_EXP)
+
+    R_PRIORITY_OPERATOR  go to state 204
+
+
+State 234
+
+   91 R_EXP: R_EXP R_BITWISE_OPERATOR R_TERM •
+   96 R_TERM: R_TERM • R_PRIORITY_OPERATOR R_OPERAND
+
+    TOKEN_OVER      shift, and go to state 201
+    TOKEN_PERCENT   shift, and go to state 202
+    TOKEN_ASTERISK  shift, and go to state 203
+
+    $default  reduce using rule 91 (R_EXP)
+
+    R_PRIORITY_OPERATOR  go to state 204
+
+
+State 235
+
+   96 R_TERM: R_TERM R_PRIORITY_OPERATOR R_OPERAND •
+
+    $default  reduce using rule 96 (R_TERM)
+
+
+State 236
+
+   55 R_FUNC_CALL: TOKEN_ID TOKEN_LEFT_PARENTHESES R_EXP_LIST TOKEN_RIGHT_PARENTHESES •
+
+    $default  reduce using rule 55 (R_FUNC_CALL)
+
+
+State 237
+
+   57 R_EXP_LIST: R_EXP_LIST TOKEN_COMMA • R_EXP
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 253
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 238
+
+  115 R_ARRAY_INDEX: TOKEN_ID TOKEN_LEFT_BRACKET R_EXP TOKEN_RIGHT_BRACKET •
+
+    $default  reduce using rule 115 (R_ARRAY_INDEX)
+
+
+State 239
+
+   76 R_VAR_ASSIGNMENT: R_ARRAY_INDEX TOKEN_ASSIGN R_EXP TOKEN_SEMI •
+
+    $default  reduce using rule 76 (R_VAR_ASSIGNMENT)
+
+
+State 240
+
+   77 R_VAR_ASSIGNMENT: R_POINTER_CONTENT TOKEN_ASSIGN R_EXP TOKEN_SEMI •
+
+    $default  reduce using rule 77 (R_VAR_ASSIGNMENT)
+
+
+State 241
+
+   60 R_ARG_LIST: R_ARG_LIST TOKEN_COMMA R_ARG •
+
+    $default  reduce using rule 60 (R_ARG_LIST)
+
+
+State 242
+
+   64 R_ARG: R_MOD_QUALIFIER R_TYPE_ALL TOKEN_ID •
+
+    $default  reduce using rule 64 (R_ARG)
+
+
+State 243
+
+   62 R_ARG: R_MOD_QUALIFIER R_SIGN_QUALIFIER R_TYPE_ALL • TOKEN_ID
+
+    TOKEN_ID  shift, and go to state 254
+
+
+State 244
+
+   63 R_ARG: R_SIGN_QUALIFIER R_TYPE_ALL TOKEN_ID •
+
+    $default  reduce using rule 63 (R_ARG)
+
+
+State 245
+
+   39 R_IF_STATEMENT: TOKEN_IF TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT •
+   40               | TOKEN_IF TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT • TOKEN_ELSE R_LOCAL_STATEMENT
+
+    TOKEN_ELSE  shift, and go to state 255
+
+    TOKEN_ELSE  [reduce using rule 39 (R_IF_STATEMENT)]
+    $default    reduce using rule 39 (R_IF_STATEMENT)
+
+
+State 246
+
+   45 R_DO_WHILE_LOOP: TOKEN_DO R_LOCAL_STATEMENT TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP • TOKEN_RIGHT_PARENTHESES TOKEN_SEMI
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_RIGHT_PARENTHESES      shift, and go to state 256
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 247
+
+   44 R_WHILE_LOOP: TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_SEMI •
+
+    $default  reduce using rule 44 (R_WHILE_LOOP)
+
+
+State 248
+
+   43 R_WHILE_LOOP: TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT •
+
+    $default  reduce using rule 43 (R_WHILE_LOOP)
+
+
+State 249
+
+   47 R_FOR_INIT_FIELD: TOKEN_ID TOKEN_ASSIGN R_EXP •
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    $default  reduce using rule 47 (R_FOR_INIT_FIELD)
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 250
+
+   46 R_FOR_LOOP: TOKEN_FOR TOKEN_LEFT_PARENTHESES R_FOR_INIT_FIELD TOKEN_SEMI R_EXP • TOKEN_SEMI R_FOR_ASSIGNMENT_FIELD TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_SEMI                   shift, and go to state 257
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 251
+
+   30 R_SWITCH: TOKEN_SWITCH TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_LEFT_BRACE • R_SWITCH_BODY TOKEN_RIGHT_BRACE
+
+    TOKEN_CASE     shift, and go to state 258
+    TOKEN_DEFAULT  shift, and go to state 259
+
+    R_SWITCH_BODY  go to state 260
+    R_CASE_LIST    go to state 261
+    R_CASE         go to state 262
+    R_DEFAULT      go to state 263
+
+
+State 252
+
+   94 R_EXP: R_EXP TOKEN_TERNARY R_EXP TOKEN_COLON • R_EXP
+
+    TOKEN_MINUS             shift, and go to state 100
+    TOKEN_LEFT_PARENTHESES  shift, and go to state 101
+    TOKEN_INCREMENT         shift, and go to state 55
+    TOKEN_DECREMENT         shift, and go to state 56
+    TOKEN_BITWISE_AND       shift, and go to state 103
+    TOKEN_BITWISE_NOT       shift, and go to state 104
+    TOKEN_LOGICAL_NOT       shift, and go to state 105
+    TOKEN_ASTERISK          shift, and go to state 57
+    TOKEN_FNUM              shift, and go to state 106
+    TOKEN_NUM               shift, and go to state 107
+    TOKEN_STR               shift, and go to state 108
+    TOKEN_ID                shift, and go to state 109
+    TOKEN_CNUM              shift, and go to state 110
+
+    R_FUNC_CALL        go to state 111
+    R_EXP              go to state 264
+    R_TERM             go to state 113
+    R_OPERAND          go to state 114
+    R_FACTOR           go to state 115
+    R_ARRAY_INDEX      go to state 116
+    R_POINTER_CONTENT  go to state 117
+    R_INC_DEC          go to state 118
+    R_PRE_INCREMENT    go to state 81
+    R_POST_INCREMENT   go to state 82
+    R_PRE_DECREMENT    go to state 83
+    R_POST_DECREMENT   go to state 84
+    R_TYPE_CAST        go to state 119
+
+
+State 253
+
+   57 R_EXP_LIST: R_EXP_LIST TOKEN_COMMA R_EXP •
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    $default  reduce using rule 57 (R_EXP_LIST)
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 254
+
+   62 R_ARG: R_MOD_QUALIFIER R_SIGN_QUALIFIER R_TYPE_ALL TOKEN_ID •
+
+    $default  reduce using rule 62 (R_ARG)
+
+
+State 255
+
+   40 R_IF_STATEMENT: TOKEN_IF TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT TOKEN_ELSE • R_LOCAL_STATEMENT
+
+    TOKEN_IF          shift, and go to state 45
+    TOKEN_DO          shift, and go to state 46
+    TOKEN_WHILE       shift, and go to state 47
+    TOKEN_FOR         shift, and go to state 48
+    TOKEN_SWITCH      shift, and go to state 49
+    TOKEN_RETURN      shift, and go to state 50
+    TOKEN_BREAK       shift, and go to state 51
+    TOKEN_INT         shift, and go to state 1
+    TOKEN_FLOAT       shift, and go to state 2
+    TOKEN_DOUBLE      shift, and go to state 3
+    TOKEN_CHAR        shift, and go to state 4
+    TOKEN_VOID        shift, and go to state 5
+    TOKEN_CONTINUE    shift, and go to state 52
+    TOKEN_EXTERN      shift, and go to state 6
+    TOKEN_GOTO        shift, and go to state 53
+    TOKEN_LONG        shift, and go to state 7
+    TOKEN_SHORT       shift, and go to state 8
+    TOKEN_STATIC      shift, and go to state 9
+    TOKEN_SIGNED      shift, and go to state 10
+    TOKEN_UNSIGNED    shift, and go to state 11
+    TOKEN_VOLATILE    shift, and go to state 12
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_INCREMENT   shift, and go to state 55
+    TOKEN_DECREMENT   shift, and go to state 56
+    TOKEN_CONSTANT    shift, and go to state 13
+    TOKEN_ASTERISK    shift, and go to state 57
+    TOKEN_ID          shift, and go to state 58
+
+    R_LOCAL_STATEMENT       go to state 265
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 256
+
+   45 R_DO_WHILE_LOOP: TOKEN_DO R_LOCAL_STATEMENT TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES • TOKEN_SEMI
+
+    TOKEN_SEMI  shift, and go to state 266
+
+
+State 257
+
+   46 R_FOR_LOOP: TOKEN_FOR TOKEN_LEFT_PARENTHESES R_FOR_INIT_FIELD TOKEN_SEMI R_EXP TOKEN_SEMI • R_FOR_ASSIGNMENT_FIELD TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+
+    TOKEN_INCREMENT  shift, and go to state 55
+    TOKEN_DECREMENT  shift, and go to state 56
+    TOKEN_ID         shift, and go to state 267
+
+    R_FOR_ASSIGNMENT_FIELD  go to state 268
+    R_COMPOUND_VAR_ASSIGN   go to state 269
+    R_SIMPLE_VAR_ASSIGN     go to state 270
+    R_INC_DEC               go to state 271
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+
+
+State 258
+
+   36 R_CASE: TOKEN_CASE • TOKEN_NUM TOKEN_COLON R_LOCAL_STATEMENT_LIST
+   37       | TOKEN_CASE • TOKEN_CNUM TOKEN_COLON R_LOCAL_STATEMENT_LIST
+
+    TOKEN_NUM   shift, and go to state 272
+    TOKEN_CNUM  shift, and go to state 273
+
+
+State 259
+
+   38 R_DEFAULT: TOKEN_DEFAULT • TOKEN_COLON R_LOCAL_STATEMENT_LIST
+
+    TOKEN_COLON  shift, and go to state 274
+
+
+State 260
+
+   30 R_SWITCH: TOKEN_SWITCH TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_LEFT_BRACE R_SWITCH_BODY • TOKEN_RIGHT_BRACE
+
+    TOKEN_RIGHT_BRACE  shift, and go to state 275
+
+
+State 261
+
+   31 R_SWITCH_BODY: R_CASE_LIST • R_DEFAULT
+   32              | R_CASE_LIST •
+   34 R_CASE_LIST: R_CASE_LIST • R_CASE
+
+    TOKEN_CASE     shift, and go to state 258
+    TOKEN_DEFAULT  shift, and go to state 259
+
+    $default  reduce using rule 32 (R_SWITCH_BODY)
+
+    R_CASE     go to state 276
+    R_DEFAULT  go to state 277
+
+
+State 262
+
+   35 R_CASE_LIST: R_CASE •
+
+    $default  reduce using rule 35 (R_CASE_LIST)
+
+
+State 263
+
+   33 R_SWITCH_BODY: R_DEFAULT •
+
+    $default  reduce using rule 33 (R_SWITCH_BODY)
+
+
+State 264
+
+   89 R_EXP: R_EXP • R_ARITHMETIC_OPERATOR R_TERM
+   90      | R_EXP • R_CONDITION_OPERATOR R_TERM
+   91      | R_EXP • R_BITWISE_OPERATOR R_TERM
+   93      | R_EXP • R_LOGIC_OPERATOR R_TERM
+   94      | R_EXP • TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP
+   94      | R_EXP TOKEN_TERNARY R_EXP TOKEN_COLON R_EXP •
+
+    TOKEN_PLUS                   shift, and go to state 180
+    TOKEN_MINUS                  shift, and go to state 181
+    TOKEN_TERNARY                shift, and go to state 182
+    TOKEN_BITWISE_AND            shift, and go to state 184
+    TOKEN_BITWISE_OR             shift, and go to state 185
+    TOKEN_LOGICAL_AND            shift, and go to state 186
+    TOKEN_BITWISE_XOR            shift, and go to state 187
+    TOKEN_LOGICAL_OR             shift, and go to state 188
+    TOKEN_EQUAL                  shift, and go to state 189
+    TOKEN_NOT_EQUAL              shift, and go to state 190
+    TOKEN_LESS_THAN              shift, and go to state 191
+    TOKEN_GREATER_THAN           shift, and go to state 192
+    TOKEN_LESS_THAN_OR_EQUAL     shift, and go to state 193
+    TOKEN_GREATER_THAN_OR_EQUAL  shift, and go to state 194
+    TOKEN_RIGHT_SHIFT            shift, and go to state 195
+    TOKEN_LEFT_SHIFT             shift, and go to state 196
+
+    TOKEN_PLUS                   [reduce using rule 94 (R_EXP)]
+    TOKEN_MINUS                  [reduce using rule 94 (R_EXP)]
+    TOKEN_TERNARY                [reduce using rule 94 (R_EXP)]
+    TOKEN_BITWISE_AND            [reduce using rule 94 (R_EXP)]
+    TOKEN_BITWISE_OR             [reduce using rule 94 (R_EXP)]
+    TOKEN_LOGICAL_AND            [reduce using rule 94 (R_EXP)]
+    TOKEN_BITWISE_XOR            [reduce using rule 94 (R_EXP)]
+    TOKEN_LOGICAL_OR             [reduce using rule 94 (R_EXP)]
+    TOKEN_EQUAL                  [reduce using rule 94 (R_EXP)]
+    TOKEN_NOT_EQUAL              [reduce using rule 94 (R_EXP)]
+    TOKEN_LESS_THAN              [reduce using rule 94 (R_EXP)]
+    TOKEN_GREATER_THAN           [reduce using rule 94 (R_EXP)]
+    TOKEN_LESS_THAN_OR_EQUAL     [reduce using rule 94 (R_EXP)]
+    TOKEN_GREATER_THAN_OR_EQUAL  [reduce using rule 94 (R_EXP)]
+    TOKEN_RIGHT_SHIFT            [reduce using rule 94 (R_EXP)]
+    TOKEN_LEFT_SHIFT             [reduce using rule 94 (R_EXP)]
+    $default                     reduce using rule 94 (R_EXP)
+
+    R_ARITHMETIC_OPERATOR  go to state 197
+    R_CONDITION_OPERATOR   go to state 198
+    R_LOGIC_OPERATOR       go to state 199
+    R_BITWISE_OPERATOR     go to state 200
+
+
+State 265
+
+   40 R_IF_STATEMENT: TOKEN_IF TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT TOKEN_ELSE R_LOCAL_STATEMENT •
+
+    $default  reduce using rule 40 (R_IF_STATEMENT)
+
+
+State 266
+
+   45 R_DO_WHILE_LOOP: TOKEN_DO R_LOCAL_STATEMENT TOKEN_WHILE TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_SEMI •
+
+    $default  reduce using rule 45 (R_DO_WHILE_LOOP)
+
+
+State 267
+
+   78 R_COMPOUND_VAR_ASSIGN: TOKEN_ID • R_COMPOUND_ASSIGN_OPERATOR R_EXP
+   79 R_SIMPLE_VAR_ASSIGN: TOKEN_ID • TOKEN_ASSIGN R_EXP
+  122 R_POST_INCREMENT: TOKEN_ID • TOKEN_INCREMENT
+  124 R_POST_DECREMENT: TOKEN_ID • TOKEN_DECREMENT
+
+    TOKEN_ASSIGN              shift, and go to state 85
+    TOKEN_INCREMENT           shift, and go to state 129
+    TOKEN_DECREMENT           shift, and go to state 130
+    TOKEN_PLUS_ASSIGN         shift, and go to state 131
+    TOKEN_MINUS_ASSIGN        shift, and go to state 132
+    TOKEN_LEFT_SHIFT_ASSIGN   shift, and go to state 133
+    TOKEN_RIGHT_SHIFT_ASSIGN  shift, and go to state 134
+    TOKEN_BITWISE_AND_ASSIGN  shift, and go to state 135
+    TOKEN_BITWISE_OR_ASSIGN   shift, and go to state 136
+    TOKEN_BITWISE_XOR_ASSIGN  shift, and go to state 137
+    TOKEN_MULTIPLY_ASSIGN     shift, and go to state 138
+    TOKEN_DIVIDE_ASSIGN       shift, and go to state 139
+    TOKEN_MODULUS_ASSIGN      shift, and go to state 140
+
+    R_COMPOUND_ASSIGN_OPERATOR  go to state 141
+
+
+State 268
+
+   46 R_FOR_LOOP: TOKEN_FOR TOKEN_LEFT_PARENTHESES R_FOR_INIT_FIELD TOKEN_SEMI R_EXP TOKEN_SEMI R_FOR_ASSIGNMENT_FIELD • TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT
+
+    TOKEN_RIGHT_PARENTHESES  shift, and go to state 278
+
+
+State 269
+
+   49 R_FOR_ASSIGNMENT_FIELD: R_COMPOUND_VAR_ASSIGN •
+
+    $default  reduce using rule 49 (R_FOR_ASSIGNMENT_FIELD)
+
+
+State 270
+
+   48 R_FOR_ASSIGNMENT_FIELD: R_SIMPLE_VAR_ASSIGN •
+
+    $default  reduce using rule 48 (R_FOR_ASSIGNMENT_FIELD)
+
+
+State 271
+
+   50 R_FOR_ASSIGNMENT_FIELD: R_INC_DEC •
+
+    $default  reduce using rule 50 (R_FOR_ASSIGNMENT_FIELD)
+
+
+State 272
+
+   36 R_CASE: TOKEN_CASE TOKEN_NUM • TOKEN_COLON R_LOCAL_STATEMENT_LIST
+
+    TOKEN_COLON  shift, and go to state 279
+
+
+State 273
+
+   37 R_CASE: TOKEN_CASE TOKEN_CNUM • TOKEN_COLON R_LOCAL_STATEMENT_LIST
+
+    TOKEN_COLON  shift, and go to state 280
+
+
+State 274
+
+   38 R_DEFAULT: TOKEN_DEFAULT TOKEN_COLON • R_LOCAL_STATEMENT_LIST
+
+    TOKEN_IF          shift, and go to state 45
+    TOKEN_DO          shift, and go to state 46
+    TOKEN_WHILE       shift, and go to state 47
+    TOKEN_FOR         shift, and go to state 48
+    TOKEN_SWITCH      shift, and go to state 49
+    TOKEN_RETURN      shift, and go to state 50
+    TOKEN_BREAK       shift, and go to state 51
+    TOKEN_INT         shift, and go to state 1
+    TOKEN_FLOAT       shift, and go to state 2
+    TOKEN_DOUBLE      shift, and go to state 3
+    TOKEN_CHAR        shift, and go to state 4
+    TOKEN_VOID        shift, and go to state 5
+    TOKEN_CONTINUE    shift, and go to state 52
+    TOKEN_EXTERN      shift, and go to state 6
+    TOKEN_GOTO        shift, and go to state 53
+    TOKEN_LONG        shift, and go to state 7
+    TOKEN_SHORT       shift, and go to state 8
+    TOKEN_STATIC      shift, and go to state 9
+    TOKEN_SIGNED      shift, and go to state 10
+    TOKEN_UNSIGNED    shift, and go to state 11
+    TOKEN_VOLATILE    shift, and go to state 12
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_INCREMENT   shift, and go to state 55
+    TOKEN_DECREMENT   shift, and go to state 56
+    TOKEN_CONSTANT    shift, and go to state 13
+    TOKEN_ASTERISK    shift, and go to state 57
+    TOKEN_ID          shift, and go to state 58
+
+    TOKEN_IF          [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DO          [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_WHILE       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_FOR         [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SWITCH      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_RETURN      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_BREAK       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_INT         [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_FLOAT       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DOUBLE      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CHAR        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_VOID        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CONTINUE    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_EXTERN      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_GOTO        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_LONG        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SHORT       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_STATIC      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SIGNED      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_UNSIGNED    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_VOLATILE    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_LEFT_BRACE  [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_INCREMENT   [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DECREMENT   [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CONSTANT    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_ASTERISK    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_ID          [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    $default          reduce using rule 7 (R_LOCAL_STATEMENT_LIST)
+
+    R_LOCAL_STATEMENT_LIST  go to state 281
+    R_LOCAL_STATEMENT       go to state 60
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 275
+
+   30 R_SWITCH: TOKEN_SWITCH TOKEN_LEFT_PARENTHESES R_EXP TOKEN_RIGHT_PARENTHESES TOKEN_LEFT_BRACE R_SWITCH_BODY TOKEN_RIGHT_BRACE •
+
+    $default  reduce using rule 30 (R_SWITCH)
+
+
+State 276
+
+   34 R_CASE_LIST: R_CASE_LIST R_CASE •
+
+    $default  reduce using rule 34 (R_CASE_LIST)
+
+
+State 277
+
+   31 R_SWITCH_BODY: R_CASE_LIST R_DEFAULT •
+
+    $default  reduce using rule 31 (R_SWITCH_BODY)
+
+
+State 278
+
+   46 R_FOR_LOOP: TOKEN_FOR TOKEN_LEFT_PARENTHESES R_FOR_INIT_FIELD TOKEN_SEMI R_EXP TOKEN_SEMI R_FOR_ASSIGNMENT_FIELD TOKEN_RIGHT_PARENTHESES • R_LOCAL_STATEMENT
+
+    TOKEN_IF          shift, and go to state 45
+    TOKEN_DO          shift, and go to state 46
+    TOKEN_WHILE       shift, and go to state 47
+    TOKEN_FOR         shift, and go to state 48
+    TOKEN_SWITCH      shift, and go to state 49
+    TOKEN_RETURN      shift, and go to state 50
+    TOKEN_BREAK       shift, and go to state 51
+    TOKEN_INT         shift, and go to state 1
+    TOKEN_FLOAT       shift, and go to state 2
+    TOKEN_DOUBLE      shift, and go to state 3
+    TOKEN_CHAR        shift, and go to state 4
+    TOKEN_VOID        shift, and go to state 5
+    TOKEN_CONTINUE    shift, and go to state 52
+    TOKEN_EXTERN      shift, and go to state 6
+    TOKEN_GOTO        shift, and go to state 53
+    TOKEN_LONG        shift, and go to state 7
+    TOKEN_SHORT       shift, and go to state 8
+    TOKEN_STATIC      shift, and go to state 9
+    TOKEN_SIGNED      shift, and go to state 10
+    TOKEN_UNSIGNED    shift, and go to state 11
+    TOKEN_VOLATILE    shift, and go to state 12
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_INCREMENT   shift, and go to state 55
+    TOKEN_DECREMENT   shift, and go to state 56
+    TOKEN_CONSTANT    shift, and go to state 13
+    TOKEN_ASTERISK    shift, and go to state 57
+    TOKEN_ID          shift, and go to state 58
+
+    R_LOCAL_STATEMENT       go to state 282
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 279
+
+   36 R_CASE: TOKEN_CASE TOKEN_NUM TOKEN_COLON • R_LOCAL_STATEMENT_LIST
+
+    TOKEN_IF          shift, and go to state 45
+    TOKEN_DO          shift, and go to state 46
+    TOKEN_WHILE       shift, and go to state 47
+    TOKEN_FOR         shift, and go to state 48
+    TOKEN_SWITCH      shift, and go to state 49
+    TOKEN_RETURN      shift, and go to state 50
+    TOKEN_BREAK       shift, and go to state 51
+    TOKEN_INT         shift, and go to state 1
+    TOKEN_FLOAT       shift, and go to state 2
+    TOKEN_DOUBLE      shift, and go to state 3
+    TOKEN_CHAR        shift, and go to state 4
+    TOKEN_VOID        shift, and go to state 5
+    TOKEN_CONTINUE    shift, and go to state 52
+    TOKEN_EXTERN      shift, and go to state 6
+    TOKEN_GOTO        shift, and go to state 53
+    TOKEN_LONG        shift, and go to state 7
+    TOKEN_SHORT       shift, and go to state 8
+    TOKEN_STATIC      shift, and go to state 9
+    TOKEN_SIGNED      shift, and go to state 10
+    TOKEN_UNSIGNED    shift, and go to state 11
+    TOKEN_VOLATILE    shift, and go to state 12
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_INCREMENT   shift, and go to state 55
+    TOKEN_DECREMENT   shift, and go to state 56
+    TOKEN_CONSTANT    shift, and go to state 13
+    TOKEN_ASTERISK    shift, and go to state 57
+    TOKEN_ID          shift, and go to state 58
+
+    TOKEN_IF          [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DO          [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_WHILE       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_FOR         [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SWITCH      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_RETURN      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_BREAK       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_INT         [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_FLOAT       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DOUBLE      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CHAR        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_VOID        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CONTINUE    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_EXTERN      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_GOTO        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_LONG        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SHORT       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_STATIC      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SIGNED      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_UNSIGNED    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_VOLATILE    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_LEFT_BRACE  [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_INCREMENT   [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DECREMENT   [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CONSTANT    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_ASTERISK    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_ID          [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    $default          reduce using rule 7 (R_LOCAL_STATEMENT_LIST)
+
+    R_LOCAL_STATEMENT_LIST  go to state 283
+    R_LOCAL_STATEMENT       go to state 60
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 280
+
+   37 R_CASE: TOKEN_CASE TOKEN_CNUM TOKEN_COLON • R_LOCAL_STATEMENT_LIST
+
+    TOKEN_IF          shift, and go to state 45
+    TOKEN_DO          shift, and go to state 46
+    TOKEN_WHILE       shift, and go to state 47
+    TOKEN_FOR         shift, and go to state 48
+    TOKEN_SWITCH      shift, and go to state 49
+    TOKEN_RETURN      shift, and go to state 50
+    TOKEN_BREAK       shift, and go to state 51
+    TOKEN_INT         shift, and go to state 1
+    TOKEN_FLOAT       shift, and go to state 2
+    TOKEN_DOUBLE      shift, and go to state 3
+    TOKEN_CHAR        shift, and go to state 4
+    TOKEN_VOID        shift, and go to state 5
+    TOKEN_CONTINUE    shift, and go to state 52
+    TOKEN_EXTERN      shift, and go to state 6
+    TOKEN_GOTO        shift, and go to state 53
+    TOKEN_LONG        shift, and go to state 7
+    TOKEN_SHORT       shift, and go to state 8
+    TOKEN_STATIC      shift, and go to state 9
+    TOKEN_SIGNED      shift, and go to state 10
+    TOKEN_UNSIGNED    shift, and go to state 11
+    TOKEN_VOLATILE    shift, and go to state 12
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_INCREMENT   shift, and go to state 55
+    TOKEN_DECREMENT   shift, and go to state 56
+    TOKEN_CONSTANT    shift, and go to state 13
+    TOKEN_ASTERISK    shift, and go to state 57
+    TOKEN_ID          shift, and go to state 58
+
+    TOKEN_IF          [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DO          [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_WHILE       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_FOR         [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SWITCH      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_RETURN      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_BREAK       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_INT         [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_FLOAT       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DOUBLE      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CHAR        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_VOID        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CONTINUE    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_EXTERN      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_GOTO        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_LONG        [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SHORT       [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_STATIC      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_SIGNED      [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_UNSIGNED    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_VOLATILE    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_LEFT_BRACE  [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_INCREMENT   [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_DECREMENT   [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_CONSTANT    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_ASTERISK    [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    TOKEN_ID          [reduce using rule 7 (R_LOCAL_STATEMENT_LIST)]
+    $default          reduce using rule 7 (R_LOCAL_STATEMENT_LIST)
+
+    R_LOCAL_STATEMENT_LIST  go to state 284
+    R_LOCAL_STATEMENT       go to state 60
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 281
+
+    8 R_LOCAL_STATEMENT_LIST: R_LOCAL_STATEMENT_LIST • R_LOCAL_STATEMENT
+   38 R_DEFAULT: TOKEN_DEFAULT TOKEN_COLON R_LOCAL_STATEMENT_LIST •
+
+    TOKEN_IF          shift, and go to state 45
+    TOKEN_DO          shift, and go to state 46
+    TOKEN_WHILE       shift, and go to state 47
+    TOKEN_FOR         shift, and go to state 48
+    TOKEN_SWITCH      shift, and go to state 49
+    TOKEN_RETURN      shift, and go to state 50
+    TOKEN_BREAK       shift, and go to state 51
+    TOKEN_INT         shift, and go to state 1
+    TOKEN_FLOAT       shift, and go to state 2
+    TOKEN_DOUBLE      shift, and go to state 3
+    TOKEN_CHAR        shift, and go to state 4
+    TOKEN_VOID        shift, and go to state 5
+    TOKEN_CONTINUE    shift, and go to state 52
+    TOKEN_EXTERN      shift, and go to state 6
+    TOKEN_GOTO        shift, and go to state 53
+    TOKEN_LONG        shift, and go to state 7
+    TOKEN_SHORT       shift, and go to state 8
+    TOKEN_STATIC      shift, and go to state 9
+    TOKEN_SIGNED      shift, and go to state 10
+    TOKEN_UNSIGNED    shift, and go to state 11
+    TOKEN_VOLATILE    shift, and go to state 12
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_INCREMENT   shift, and go to state 55
+    TOKEN_DECREMENT   shift, and go to state 56
+    TOKEN_CONSTANT    shift, and go to state 13
+    TOKEN_ASTERISK    shift, and go to state 57
+    TOKEN_ID          shift, and go to state 58
+
+    $default  reduce using rule 38 (R_DEFAULT)
+
+    R_LOCAL_STATEMENT       go to state 143
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 282
+
+   46 R_FOR_LOOP: TOKEN_FOR TOKEN_LEFT_PARENTHESES R_FOR_INIT_FIELD TOKEN_SEMI R_EXP TOKEN_SEMI R_FOR_ASSIGNMENT_FIELD TOKEN_RIGHT_PARENTHESES R_LOCAL_STATEMENT •
+
+    $default  reduce using rule 46 (R_FOR_LOOP)
+
+
+State 283
+
+    8 R_LOCAL_STATEMENT_LIST: R_LOCAL_STATEMENT_LIST • R_LOCAL_STATEMENT
+   36 R_CASE: TOKEN_CASE TOKEN_NUM TOKEN_COLON R_LOCAL_STATEMENT_LIST •
+
+    TOKEN_IF          shift, and go to state 45
+    TOKEN_DO          shift, and go to state 46
+    TOKEN_WHILE       shift, and go to state 47
+    TOKEN_FOR         shift, and go to state 48
+    TOKEN_SWITCH      shift, and go to state 49
+    TOKEN_RETURN      shift, and go to state 50
+    TOKEN_BREAK       shift, and go to state 51
+    TOKEN_INT         shift, and go to state 1
+    TOKEN_FLOAT       shift, and go to state 2
+    TOKEN_DOUBLE      shift, and go to state 3
+    TOKEN_CHAR        shift, and go to state 4
+    TOKEN_VOID        shift, and go to state 5
+    TOKEN_CONTINUE    shift, and go to state 52
+    TOKEN_EXTERN      shift, and go to state 6
+    TOKEN_GOTO        shift, and go to state 53
+    TOKEN_LONG        shift, and go to state 7
+    TOKEN_SHORT       shift, and go to state 8
+    TOKEN_STATIC      shift, and go to state 9
+    TOKEN_SIGNED      shift, and go to state 10
+    TOKEN_UNSIGNED    shift, and go to state 11
+    TOKEN_VOLATILE    shift, and go to state 12
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_INCREMENT   shift, and go to state 55
+    TOKEN_DECREMENT   shift, and go to state 56
+    TOKEN_CONSTANT    shift, and go to state 13
+    TOKEN_ASTERISK    shift, and go to state 57
+    TOKEN_ID          shift, and go to state 58
+
+    $default  reduce using rule 36 (R_CASE)
+
+    R_LOCAL_STATEMENT       go to state 143
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27
+
+
+State 284
+
+    8 R_LOCAL_STATEMENT_LIST: R_LOCAL_STATEMENT_LIST • R_LOCAL_STATEMENT
+   37 R_CASE: TOKEN_CASE TOKEN_CNUM TOKEN_COLON R_LOCAL_STATEMENT_LIST •
+
+    TOKEN_IF          shift, and go to state 45
+    TOKEN_DO          shift, and go to state 46
+    TOKEN_WHILE       shift, and go to state 47
+    TOKEN_FOR         shift, and go to state 48
+    TOKEN_SWITCH      shift, and go to state 49
+    TOKEN_RETURN      shift, and go to state 50
+    TOKEN_BREAK       shift, and go to state 51
+    TOKEN_INT         shift, and go to state 1
+    TOKEN_FLOAT       shift, and go to state 2
+    TOKEN_DOUBLE      shift, and go to state 3
+    TOKEN_CHAR        shift, and go to state 4
+    TOKEN_VOID        shift, and go to state 5
+    TOKEN_CONTINUE    shift, and go to state 52
+    TOKEN_EXTERN      shift, and go to state 6
+    TOKEN_GOTO        shift, and go to state 53
+    TOKEN_LONG        shift, and go to state 7
+    TOKEN_SHORT       shift, and go to state 8
+    TOKEN_STATIC      shift, and go to state 9
+    TOKEN_SIGNED      shift, and go to state 10
+    TOKEN_UNSIGNED    shift, and go to state 11
+    TOKEN_VOLATILE    shift, and go to state 12
+    TOKEN_LEFT_BRACE  shift, and go to state 32
+    TOKEN_INCREMENT   shift, and go to state 55
+    TOKEN_DECREMENT   shift, and go to state 56
+    TOKEN_CONSTANT    shift, and go to state 13
+    TOKEN_ASTERISK    shift, and go to state 57
+    TOKEN_ID          shift, and go to state 58
+
+    $default  reduce using rule 37 (R_CASE)
+
+    R_LOCAL_STATEMENT       go to state 143
+    R_COMPOUND_STATEMENT    go to state 61
+    R_CONTINUE              go to state 62
+    R_BREAK                 go to state 63
+    R_GOTO                  go to state 64
+    R_SWITCH                go to state 65
+    R_IF_STATEMENT          go to state 66
+    R_RETURN                go to state 67
+    R_WHILE_LOOP            go to state 68
+    R_DO_WHILE_LOOP         go to state 69
+    R_FOR_LOOP              go to state 70
+    R_LABEL                 go to state 71
+    R_FUNC_CALL             go to state 72
+    R_VAR_DECLARATION       go to state 73
+    R_ARR_DECLARATION       go to state 20
+    R_VAR_ASSIGNMENT        go to state 74
+    R_COMPOUND_VAR_ASSIGN   go to state 75
+    R_SIMPLE_VAR_ASSIGN     go to state 76
+    R_VAR_PREAMBLE          go to state 77
+    R_ARRAY_INDEX           go to state 78
+    R_POINTER_CONTENT       go to state 79
+    R_INC_DEC               go to state 80
+    R_PRE_INCREMENT         go to state 81
+    R_POST_INCREMENT        go to state 82
+    R_PRE_DECREMENT         go to state 83
+    R_POST_DECREMENT        go to state 84
+    R_TYPE_ALL              go to state 22
+    R_TYPE_PTR              go to state 23
+    R_TYPE                  go to state 24
+    R_VISIBILITY_QUALIFIER  go to state 25
+    R_MOD_QUALIFIER         go to state 26
+    R_SIGN_QUALIFIER        go to state 27

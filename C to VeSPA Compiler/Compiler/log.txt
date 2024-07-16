@@ -1,0 +1,58 @@
+ 
+ 
+ 
+ 
+INT ID SEMI  
+ 
+INT ID LEFT_PAREN INT ID COMMA INT ID RIGHT_PAREN SEMI  
+ 
+ 
+INT ID LEFT_PAREN RIGHT_PAREN  
+LEFT_BRACE  
+INT ID SEMI  
+INT ID ASSIGN NUM SEMI  
+ID ASSIGN NUM SEMI  
+ 
+ID ASSIGN ID LEFT_PAREN ID COMMA ID RIGHT_PAREN SEMI  
+ 
+RETURN NUM SEMI  
+RIGHT_BRACE  
+ 
+ 
+INT ID LEFT_PAREN INT ID COMMA INT ID RIGHT_PAREN  
+LEFT_BRACE  
+ 
+ 
+ 
+INT ID SEMI  
+ 
+IF LEFT_PAREN ID GREATER_THAN NUM RIGHT_PAREN  
+ID ASSIGN ID PLUS ID SEMI  
+ELSE  
+ID ASSIGN ID ASTERISK ID SEMI  
+ 
+RETURN ID SEMI  
+RIGHT_BRACE 
+-------------------AST-------------------
+
+
+
+-----------------AST END-----------------
+
+
+
+
+-----------------SYMBOLS-----------------
+
+
+-----------------SYMBOLS END-----------------
+
+-------------------OPTIMIZED AST-------------------
+
+
+
+-----------------OPTIMIZED  AST END-----------------
+
+
+
+Releasing Symbol Table resources...
